@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMASI Vạn Phúc World Cup 2026 - Live Draw</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+    <!-- Babel compiler for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Firebase SDK (Compat Mode) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <!-- EMASI Brand Alignment -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        :root {
+            /* Fluid sizing scaled down for laptop screens to avoid 67% zoom requirement */
+            --fluid-text-h1: clamp(1.5rem, 3.5vw, 2.5rem);
+            --fluid-text-h2: clamp(0.8rem, 2vw, 1.5rem);
+            --fluid-text-h3: clamp(1.2rem, 2.5vw, 2rem);
+            --fluid-box-h: clamp(1.5rem, 3vh, 2rem);
+            --fluid-grid-gap: clamp(0.3rem, 0.8vw, 1rem);
+        }
+
+        .fluid-h1 {
+            font-size: var(--fluid-text-h1);
+        }
+
+        .fluid-h2 {
+            font-size: var(--fluid-text-h2);
+        }
+
+        .fluid-h3 {
+            font-size: var(--fluid-text-h3);
+        }
+
+        /* Custom scrollbar matching glass theme */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(34, 211, 238, 0.5);
+        }
+
+        /* Prevent content cut-off on short screens */
+        @media (max-height: 700px) {
+            .presentation-header {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+
+            .grid-container {
+                gap: 0.5rem;
+            }
+
+            .group-box-row {
+                height: 2rem;
+            }
+        }
+
+        /* CINEMATIC GLASSMORPHISM CSS */
+        .glass {
+            background: rgba(10, 15, 25, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-light {
+            background: rgba(25, 35, 50, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-active {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(20, 30, 40, 0.8) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3), inset 0 1px 5px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Gold text gradient */
+        .text-gradient-gold {
+            background: linear-gradient(to right, #ffd700, #f8b500, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* NEW ANIMATIONS FOR MENU */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .stagger-1 {
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+        }
+
+        .stagger-2 {
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.15s forwards;
+            opacity: 0;
+        }
+
+        .stagger-3 {
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards;
+            opacity: 0;
+        }
+
+        @keyframes shine {
+            from {
+                transform: translateX(-100%) skewX(-15deg);
+            }
+
+            to {
+                transform: translateX(200%) skewX(-15deg);
+            }
+        }
+
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shine-effect::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes pulse-slow {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-slow 8s ease-in-out infinite;
+        }
+
+        .card-perspective {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+    </style>
+</head>
+
+<body class="bg-[#021424] text-white" style="font-family: 'Montserrat', sans-serif;">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, Component } = React;
+
+        // Global error handler for Babel/Initial load issues
+        window.onerror = function (msg, url, lineNo, columnNo, error) {
+            console.error('CRITICAL ERROR:', msg, 'at', lineNo, ':', columnNo);
+            const root = document.getElementById('root');
+            if (root) {
+                root.innerHTML = `<div style="padding: 40px; color: #ff5555; background: #0a0a0a; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                    <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: #D4AF37;">FATAL APPLICATION CRASH</h1>
+                    <p style="font-size: 1.1rem; opacity: 0.8; max-width: 600px; line-height: 1.6; color: #fff;">The FIFA Draw System encountered a runtime error that prevented it from starting.</p>
+                    <div style="background: rgba(255,0,0,0.1); border: 1px solid rgba(255,0,0,0.2); padding: 20px; border-radius: 12px; margin: 2rem 0; font-family: monospace; text-align: left; width: 100%; max-width: 800px; color: #ffaa00;">
+                        <p style="margin-bottom: 5px; font-weight: bold;">Error: ${msg}</p>
+                        <p style="color: #888; font-size: 0.8rem;">Location: ${url}:${lineNo}:${columnNo}</p>
+                        <div style="margin-top: 15px; color: #fff; font-size: 0.7rem; opacity: 0.5;">Note: Line numbers refer to Babel transpiled script.</div>
+                    </div>
+                    <button onclick="window.location.reload()" style="background: #D4AF37; color: black; border: none; padding: 15px 40px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem;">RELOAD SYSTEM</button>
+                </div>`;
+            }
+            return false;
+        };
+
+        class ErrorBoundary extends Component {
+            constructor(props) {
+                super(props);
+                this.state = { hasError: false, error: null };
+            }
+            static getDerivedStateFromError(error) {
+                return { hasError: true, error };
+            }
+            componentDidCatch(error, errorInfo) {
+                console.error("ErrorBoundary caught an error:", error, errorInfo);
+            }
+            render() {
+                if (this.state.hasError) {
+                    return (
+                        <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-10 font-sans">
+                            <div className="max-w-xl w-full glass p-8 rounded-3xl border border-red-500/30 shadow-2xl">
+                                <h1 className="text-2xl font-black text-red-500 mb-4 uppercase tracking-tighter">Application Error</h1>
+                                <p className="text-white/60 mb-6 text-sm">The FIFA Draw interface encountered a problem. This is likely due to an incomplete data synchronization with the server.</p>
+                                <div className="bg-black/50 p-4 rounded-xl border border-white/5 mb-6 overflow-auto max-h-40">
+                                    <code className="text-xs text-red-400 break-words">{this.state.error && this.state.error.toString()}</code>
+                                </div>
+                                <button
+                                    onClick={() => window.location.reload()}
+                                    className="w-full py-3 glass-active text-amber-500 font-bold rounded-xl hover:bg-white/5 transition"
+                                >
+                                    Reload Application
+                                </button>
+                            </div>
+                        </div>
+                    );
+                }
+                return this.props.children;
+            }
+        }
+
+        // --- SVGs ---
+        const IconBase = ({ children, className = "w-6 h-6", strokeWidth = 2, ...props }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>
+                {children}
+            </svg>
+        );
+        const Trophy = (props) => <IconBase {...props}><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" /><path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" /><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" /><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" /></IconBase>;
+        const Play = (props) => <IconBase {...props}><polygon points="5 3 19 12 5 21 5 3" /></IconBase>;
+        const Check = (props) => <IconBase {...props}><polyline points="20 6 9 17 4 12" /></IconBase>;
+        const ListOrdered = (props) => <IconBase {...props}><line x1="10" x2="21" y1="6" y2="6" /><line x1="10" x2="21" y1="12" y2="12" /><line x1="10" x2="21" y1="18" y2="18" /><path d="M4 6h1v4" /><path d="M4 10h2" /><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1" /></IconBase>;
+        const MonitorPlay = (props) => <IconBase {...props}><rect width="20" height="14" x="2" y="3" rx="2" /><path d="M12 17v4" /><path d="M8 21h8" /><path d="m10 7 5 3-5 3Z" /></IconBase>;
+        const Settings = (props) => <IconBase {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></IconBase>;
+        const Search = (props) => <IconBase {...props}><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></IconBase>;
+        const X = (props) => <IconBase {...props}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></IconBase>;
+        const Radio = (props) => <IconBase {...props}><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" /><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" /><circle cx="12" cy="12" r="2" /><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" /><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19" /></IconBase>;
+        const LayoutGrid = (props) => <IconBase {...props}><rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" /></IconBase>;
+        const Pencil = (props) => <IconBase {...props}><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" /><path d="m15 5 4 4" /></IconBase>;
+        const Trash2 = (props) => <IconBase {...props}><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></IconBase>;
+        const CheckCircle2 = (props) => <IconBase {...props}><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></IconBase>;
+        const Maximize2 = (props) => <IconBase {...props}><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><line x1="21" y1="3" x2="14" y2="10" /><line x1="3" y1="21" x2="10" y2="14" /></IconBase>;
+        const MousePointer2 = (props) => <IconBase {...props}><path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z" /><path d="m13 13 6 6" /></IconBase>;
+
+        // --- DATA ---
+        const GROUPS_ALL = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+
+        const INITIAL_CLASSES = [
+            "1E", "1M", "1A", "1S", "2E", "2M", "2A", "3E",
+            "3M", "3A", "3S", "4E", "4M", "4A", "4S", "5E",
+            "5M", "5A", "5S", "6E", "6M", "6A", "6S", "7M",
+            "7A", "7S", "8M", "8A", "9E", "9M", "9A", "10E",
+            "10M", "11E", "11M", "12E", "12M", "TA", "GUARDS", "OFFICE",
+            "SA", "SKYLINE", "ADMISSION", "CLEANERS", "IT+TEAM ALPHA", "SUBJECT TEACHERS", "MAINTENANCE"
+        ];
+
+        const INITIAL_COUNTRIES = [
+            // Column 1
+            { name: "Korea Republic", code: "kr" }, { name: "Mexico", code: "mx" }, { name: "South Africa", code: "za" },
+            { name: "Canada", code: "ca" }, { name: "Qatar", code: "qa" }, { name: "Switzerland", code: "ch" },
+            { name: "Brazil", code: "br" }, { name: "Morocco", code: "ma" }, { name: "Haiti", code: "ht" },
+            { name: "Scotland", code: "gb-sct" }, { name: "USA", code: "us" }, { name: "Paraguay", code: "py" },
+
+            // Column 2
+            { name: "Australia", code: "au" }, { name: "Germany", code: "de" }, { name: "Curacao", code: "cw" },
+            { name: "Cote d'Ivoire", code: "ci" }, { name: "Ecuador", code: "ec" }, { name: "Netherlands", code: "nl" },
+            { name: "Japan", code: "jp" }, { name: "Tunisia", code: "tn" }, { name: "Belgium", code: "be" },
+            { name: "Egypt", code: "eg" }, { name: "New Zealand", code: "nz" }, { name: "Spain", code: "es" },
+
+            // Column 3
+            { name: "Cape Verde", code: "cv" }, { name: "Saudi Arabia", code: "sa" }, { name: "Uruguay", code: "uy" },
+            { name: "France", code: "fr" }, { name: "Senegal", code: "sn" }, { name: "Norway", code: "no" },
+            { name: "Argentina", code: "ar" }, { name: "Algeria", code: "dz" }, { name: "Austria", code: "at" },
+            { name: "Jordan", code: "jo" }, { name: "Portugal", code: "pt" }, { name: "Uzbekistan", code: "uz" },
+
+            // Column 4
+            { name: "Colombia", code: "co" }, { name: "England", code: "gb-eng" }, { name: "Croatia", code: "hr" },
+            { name: "Ghana", code: "gh" }, { name: "Panama", code: "pa" }, { name: "Czech Republic", code: "cz" },
+            { name: "Turkey", code: "tr" }, { name: "Iraq", code: "iq" }, { name: "Sweden", code: "se" },
+            { name: "Bosnia & Herzegovina", code: "ba" }, { name: "DR Congo", code: "cd" }
+        ];
+
+        const getFlagUrl = (code) => {
+            if (!code || code === 'unknown') return 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzFmMjkyZSIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjQwIiBmaWxsPSIjM2Y0ZjZlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4/PC90ZXh0Pjwvc3ZnPg==';
+            return `https://flagcdn.com/w160/${code}.png`;
+        };
+
+        // --- REUSABLE BACKGROUND COMPONENT ---
+        const GlobalBackground = () => (
+            <div className="fixed inset-0 z-0 pointer-events-none bg-[#050B14] overflow-hidden">
+                {/* Stadium background overlay via CSS gradients to mimic a dark stadium pitch under spotlights */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#2b4f2c_0%,#050B14_60%)] opacity-80"></div>
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20 transform perspective-1000 rotateX(60deg) scale(2) translate-y-[20%]"></div>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] max-w-[1200px] max-h-[1200px] bg-[radial-gradient(circle_at_center,rgba(255,223,100,0.1)_0%,transparent_50%)] mix-blend-screen pointer-events-none"></div>
+                <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[40vw] h-[60vh] bg-[conic-gradient(from_180deg_at_50%_0%,rgba(255,255,255,0)_0deg,rgba(255,255,255,0.05)_160deg,rgba(255,255,255,0.2)_180deg,rgba(255,255,255,0.05)_200deg,rgba(255,255,255,0)_360deg)] blur-2xl"></div>
+                {/* Vignette */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,#020617_100%)] opacity-90"></div>
+            </div>
+        );
+
+        // --- REUSABLE TREE VIEW COMPONENT ---
+        const GroupTreeView = ({ state, autoScrollRef, onRemoveResult }) => {
+            const [editingGroup, setEditingGroup] = useState(null);
+
+            return (
+                <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                    <div className="flex flex-col gap-4">
+                        {GROUPS_ALL.map(g => {
+                            const results = (state && Array.isArray(state.results)) ? state.results : [];
+                            const groupResults = results.filter(r => r && r.group === g);
+
+                            let displayResults = [...groupResults];
+                            const currentDraw = (state && state.currentDraw) ? state.currentDraw : {};
+                            if (state && state.currentGroup === g && (currentDraw.stage || 0) > 0) {
+                                displayResults.push({
+                                    isPending: true,
+                                    class: currentDraw.selectedClass,
+                                    country: (currentDraw.stage || 0) === 2 ? currentDraw.selectedCountry : null
+                                });
+                            }
+
+                            const max = g === 'L' ? 3 : 4;
+                            const isFull = displayResults.length >= max;
+                            const isCurrent = state && state.currentGroup === g;
+                            const isEditing = editingGroup === g;
+
+                            const currentRef = isCurrent ? autoScrollRef : null;
+
+                            return (
+                                <div key={g} ref={currentRef} className={`relative glass-light p-4 rounded-3xl transition-all duration-700 ${isCurrent ? 'glass-active scale-[1.02] shadow-[0_20px_40px_rgba(212,175,55,0.3)] border-amber-400' : isFull ? 'opacity-40 grayscale-[0.5]' : 'border-white/5'} ${isEditing ? 'border-amber-400 glass border-dashed opacity-100' : ''}`}>
+                                    {isCurrent && <div className="absolute -top-2 -right-2 bg-amber-500 text-black text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg z-10 animate-pulse">ACTIVE</div>}
+
+                                    <div className="flex justify-between items-center mb-3">
+                                        <h4 className={`text-xs font-black tracking-widest ${isCurrent ? 'text-amber-400' : 'text-white/60'}`}>GROUP {g}</h4>
+                                        <div className="flex items-center gap-2">
+                                            <span className={`text-[10px] font-bold ${isFull ? 'text-emerald-400' : 'text-white/30'}`}>{displayResults.length}/{max}</span>
+                                            {onRemoveResult && (
+                                                <button
+                                                    onClick={() => setEditingGroup(isEditing ? null : g)}
+                                                    className={`p-1.5 rounded-lg transition-all ${isEditing ? 'bg-amber-500 text-black' : 'text-white/30 hover:text-amber-400 hover:bg-white/5'}`}
+                                                >
+                                                    {isEditing ? <Check className="w-3 h-3" /> : <Pencil className="w-3 h-3" />}
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        {displayResults.length === 0 && <div className="text-[10px] text-white/20 italic py-2 text-center border border-dashed border-white/5 rounded-xl">No slots drawn yet</div>}
+                                        {displayResults.map((r, i) => (
+                                            <div key={i} className={`flex items-center gap-3 glass p-2 rounded-xl border transition-all ${r.isPending ? 'border-amber-400 border-dashed bg-amber-500/10' : 'border-white/5'} ${isEditing && !r.isPending ? 'hover:border-red-500/50 hover:bg-red-500/5' : ''}`}>
+                                                <div className="w-8 h-8 rounded-lg glass-light flex items-center justify-center shrink-0 border border-white/10">
+                                                    <span className={`text-[10px] font-black ${r.isPending ? 'text-amber-400' : 'text-emerald-400'}`}>{r.class}</span>
+                                                </div>
+
+                                                <div className="flex-1 min-w-0">
+                                                    {r.country ? (
+                                                        <div className="flex items-center justify-between gap-2 text-white">
+                                                            <span className="text-[11px] font-bold truncate drop-shadow-sm">{r.country.name}</span>
+                                                            <img src={getFlagUrl(r.country.code)} className="w-5 h-3.5 object-cover rounded shadow-sm border border-white/20 shrink-0" />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex items-center justify-between gap-2">
+                                                            <span className="text-[10px] font-bold text-white/30 italic">Waiting...</span>
+                                                            <div className="w-5 h-3.5 glass-light rounded border border-white/5 shrink-0 animate-pulse"></div>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {isEditing && !r.isPending && (
+                                                    <button
+                                                        onClick={() => onRemoveResult(r)}
+                                                        className="text-white/20 hover:text-red-400 p-1.5 rounded-lg transition-all"
+                                                    >
+                                                        <Trash2 className="w-3.5 h-3.5" />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            );
+        };
+
+        // --- FIREBASE INITIALIZATION ---
+        // Project: worldcup-emasi
+        const firebaseConfig = {
+            // apiKey: "YOUR_API_KEY", // Add if needed for restricted rules
+            databaseURL: "https://worldcup-emasi-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        };
+
+        // Initialize Firebase Compat
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+
+        // --- MAIN COMPONENT ---
+        function App() {
+            const [appMode, setAppMode] = useState(null);
+            const [isConnected, setIsConnected] = useState(false);
+
+            const INITIAL_STATE = {
+                currentGroup: "",
+                lastActiveGroup: "",
+                remainingClasses: INITIAL_CLASSES,
+                remainingCountries: INITIAL_COUNTRIES,
+                results: [],
+                currentDraw: {
+                    stage: 0,
+                    selectedClass: null,
+                    selectedCountry: null
+                }
+            };
+
+            // Sync state
+            const [sharedState, setSharedState] = useState(INITIAL_STATE);
+
+            // Listen to Firebase for global state updates
+            useEffect(() => {
+                const drawRef = database.ref('drawState');
+
+                // Initial fetch
+                drawRef.once('value').then((snapshot) => {
+                    const data = snapshot.val();
+                    if (data && typeof data === 'object') {
+                        setSharedState(prev => {
+                            const merged = { ...INITIAL_STATE, ...data };
+                            return {
+                                ...merged,
+                                results: Array.isArray(data.results) ? data.results : INITIAL_STATE.results,
+                                remainingClasses: Array.isArray(data.remainingClasses) ? data.remainingClasses : INITIAL_STATE.remainingClasses,
+                                remainingCountries: Array.isArray(data.remainingCountries) ? data.remainingCountries : INITIAL_STATE.remainingCountries,
+                                currentDraw: (data.currentDraw && typeof data.currentDraw === 'object') ? { ...INITIAL_STATE.currentDraw, ...data.currentDraw } : INITIAL_STATE.currentDraw
+                            };
+                        });
+                    }
+                });
+
+                // Realtime sub
+                const onValueChange = drawRef.on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data && typeof data === 'object') {
+                        setSharedState(prev => {
+                            const merged = { ...INITIAL_STATE, ...data };
+                            return {
+                                ...merged,
+                                results: Array.isArray(data.results) ? data.results : INITIAL_STATE.results,
+                                remainingClasses: Array.isArray(data.remainingClasses) ? data.remainingClasses : INITIAL_STATE.remainingClasses,
+                                remainingCountries: Array.isArray(data.remainingCountries) ? data.remainingCountries : INITIAL_STATE.remainingCountries,
+                                currentDraw: (data.currentDraw && typeof data.currentDraw === 'object') ? { ...INITIAL_STATE.currentDraw, ...data.currentDraw } : INITIAL_STATE.currentDraw
+                            };
+                        });
+                    }
+                    setIsConnected(true);
+                }, (error) => {
+                    console.error("Firebase Sync Error:", error);
+                    setIsConnected(false);
+                });
+
+                return () => drawRef.off('value', onValueChange);
+            }, []);
+
+            const updateSharedState = (newState) => {
+                setSharedState(newState);
+                // Only Admin writes to the global cloud state
+                if (appMode === 'admin') {
+                    database.ref('drawState').set(newState).catch(err => {
+                        console.error("Failed to update cloud state:", err);
+                    });
+                }
+            };
+
+            // --- MODE SELECTION SCREEN ---
+            if (!appMode) {
+                return (
+                    <div className="h-screen w-full bg-[#020617] text-white flex items-center justify-center p-4 relative overflow-hidden selection:bg-amber-500 selection:text-white">
+                        <GlobalBackground />
+
+                        {/* Main Glass Card with Float Animation & Deep Shadows */}
+                        <div className="z-10 glass rounded-[32px] p-6 lg:p-10 max-w-2xl w-full text-center relative shadow-[0_30px_60px_rgba(0,0,0,0.8)] animate-float border border-white/5 backdrop-blur-2xl">
+
+                            {/* Subtle top glow line for depth */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-[1px] bg-gradient-to-r from-transparent via-amber-400/50 to-transparent"></div>
+
+                            <div className="stagger-1">
+                                <div className="relative mb-6 flex justify-center items-center">
+                                    <div className="absolute inset-0 bg-yellow-400/20 blur-[60px] animate-pulse pointer-events-none rounded-full h-32 w-32 left-1/2 -translate-x-1/2"></div>
+                                    <img src="hình ảnh/logo WORLDCUP2026.png" className="h-28 sm:h-36 w-auto object-contain relative z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]" alt="World Cup 2026" />
+                                </div>
+                                <h1 className="text-3xl md:text-5xl font-black uppercase drop-shadow-2xl mb-2 text-white">
+                                    <span className="text-gradient-gold mr-2">EMASI</span>
+                                    <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">DRAW</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-lime-400 drop-shadow-[0_0_20px_rgba(52,211,153,0.5)]">SYSTEM</span>
+                                </h1>
+                                <p className="text-amber-100/50 mb-8 text-sm uppercase font-semibold flex items-center justify-center gap-2">
+                                    <span className="w-10 h-[1px] bg-amber-500/30"></span> Select Display Role <span className="w-10 h-[1px] bg-amber-500/30"></span>
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-5 stagger-2">
+                                {/* Admin Button */}
+                                <button
+                                    onClick={() => setAppMode('admin')}
+                                    className="group relative flex flex-col items-center justify-center gap-3 p-6 glass-light rounded-2xl hover:bg-[#0a1526]/80 hover:border-emerald-400/60 hover:shadow-[0_10px_30px_rgba(52,211,153,0.15)] transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <div className="glass-light p-3 rounded-xl group-hover:scale-110 group-hover:border-emerald-400 transition-all duration-300 border-emerald-500/30 relative z-10 shadow-inner bg-black/40">
+                                        <Settings className="w-8 h-8 text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
+                                    </div>
+                                    <div className="relative z-10">
+                                        <h3 className="text-sm lg:text-base font-black text-white uppercase mb-1 group-hover:text-emerald-300 transition-colors">Admin Dashboard</h3>
+                                        <p className="text-[10px] lg:text-xs text-emerald-100/40">Control panel, enter results</p>
+                                    </div>
+                                </button>
+
+                                {/* Presentation Button */}
+                                <button
+                                    onClick={() => setAppMode('presentation')}
+                                    className="group relative flex flex-col items-center justify-center gap-3 p-6 glass-light rounded-2xl hover:bg-[#1a0a1a]/80 hover:border-amber-400/60 hover:shadow-[0_10px_30px_rgba(251,191,36,0.15)] transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-tl from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <div className="glass-light p-3 rounded-xl group-hover:scale-110 group-hover:border-amber-400 transition-all duration-300 border-amber-500/30 relative z-10 shadow-inner bg-black/40">
+                                        <MonitorPlay className="w-8 h-8 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]" />
+                                    </div>
+                                    <div className="relative z-10">
+                                        <h3 className="text-sm lg:text-base font-black text-white uppercase mb-1 group-hover:text-amber-300 transition-colors">Presentation Screen</h3>
+                                        <p className="text-[10px] lg:text-xs text-amber-100/40">Display realtime result effects</p>
+                                    </div>
+                                </button>
+                            </div>
+
+                            {/* Summary Board Button */}
+                            <div className="mt-4 lg:mt-5 stagger-3">
+                                <button
+                                    onClick={() => setAppMode('summary')}
+                                    className="w-full group relative flex items-center justify-center gap-4 p-5 lg:p-6 glass rounded-2xl hover:bg-[#1a2a40]/80 hover:border-cyan-400/60 hover:shadow-[0_10px_30px_rgba(34,211,238,0.15)] transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-100%] group-hover:translate-x-[100%] duration-1000"></div>
+                                    <div className="flex items-center gap-5 relative z-10">
+                                        <div className="glass-light p-3 rounded-xl group-hover:scale-110 group-hover:border-cyan-400 transition-all duration-300 border-cyan-500/30 shadow-inner bg-black/40">
+                                            <LayoutGrid className="w-7 h-7 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" />
+                                        </div>
+                                        <div className="text-left">
+                                            <h3 className="text-sm lg:text-base font-black text-white uppercase mb-1 group-hover:text-cyan-300 transition-colors">Summary Board</h3>
+                                            <p className="text-[10px] lg:text-xs text-cyan-100/40">View all groups (Group Stage overview)</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+
+                            {/* Footer note */}
+                            <div className="mt-6 text-[10px] text-white/30 flex items-center justify-center gap-1.5 stagger-3">
+                                <Radio className="w-3 h-3" />
+                                <p>Open the app in 2 different tabs/windows for the full experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-[#020617] text-white font-['Montserrat',_sans-serif] selection:bg-amber-500 selection:text-white relative">
+                    <GlobalBackground />
+                    {appMode === 'admin' && (
+                        <AdminView state={sharedState} updateState={updateSharedState} isConnected={isConnected} setAppMode={setAppMode} />
+                    )}
+                    {appMode === 'presentation' && (
+                        <PresentationView state={sharedState} isConnected={isConnected} setAppMode={setAppMode} />
+                    )}
+                    {appMode === 'summary' && (
+                        <SummaryView state={sharedState} isConnected={isConnected} setAppMode={setAppMode} />
+                    )}
+
+
+                </div>
+            );
+        }
+
+        // ============================================================================
+        // 1. ADMIN DASHBOARD
+        // ============================================================================
+        function AdminView({ state, updateState, isConnected, setAppMode }) {
+            console.log("Rendering AdminView, state:", state);
+            const [selectedClassInput, setSelectedClassInput] = useState("");
+            const [searchClass, setSearchClass] = useState("");
+            const [isClassDropdownOpen, setIsClassDropdownOpen] = useState(false);
+
+            const [selectedCountryInput, setSelectedCountryInput] = useState(null);
+            const [searchCountry, setSearchCountry] = useState("");
+            const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+            const autoScrollRef = useRef(null);
+
+            // Guard against null state
+            if (!state) return <div className="p-10 text-white/50 italic">Initialising state...</div>;
+
+            const countries = (state && Array.isArray(state.remainingCountries)) ? state.remainingCountries : [];
+            const filteredCountries = countries.filter(c =>
+                c && c.name && c.name.toLowerCase().includes((searchCountry || "").toLowerCase())
+            );
+
+            const classes = (state && Array.isArray(state.remainingClasses)) ? state.remainingClasses : [];
+            const filteredClasses = classes.filter(c => {
+                return c && c.toLowerCase().includes((searchClass || "").toLowerCase());
+            });
+
+            // --- ACTIONS ---
+
+
+            const handleGroupSelect = (g) => {
+                updateState({
+                    ...state,
+                    currentGroup: g,
+                    lastActiveGroup: g ? g : state.lastActiveGroup,
+                    currentDraw: { stage: 0, selectedClass: null, selectedCountry: null }
+                });
+                setSelectedClassInput("");
+                setSelectedCountryInput(null);
+            };
+
+            const handleRevealClass = () => {
+                if (!selectedClassInput) return alert("Please select a Class first!");
+                updateState({
+                    ...state,
+                    currentDraw: { ...(state?.currentDraw || {}), stage: 1, selectedClass: selectedClassInput }
+                });
+            };
+
+            const handleRevealCountry = () => {
+                const currentDraw = state?.currentDraw || {};
+                if ((currentDraw.stage || 0) < 1) return alert("Please push the Class signal to the screen first!");
+                if (!selectedCountryInput) return alert("Please select a Country!");
+                updateState({
+                    ...state,
+                    currentDraw: { ...(state?.currentDraw || {}), stage: 2, selectedCountry: selectedCountryInput }
+                });
+            };
+
+            const handleConfirm = () => {
+                const currentDraw = state?.currentDraw || {};
+                const { selectedClass, selectedCountry } = currentDraw;
+                const results = (state && Array.isArray(state.results)) ? state.results : [];
+                const newResults = [...results, { group: (state && state.currentGroup) ? state.currentGroup : "", class: selectedClass, country: selectedCountry }];
+
+                const groupResultsCount = newResults.filter(r => r && r.group === (state && state.currentGroup ? state.currentGroup : "")).length;
+                const maxForGroup = (state && state.currentGroup === 'L') ? 3 : 4;
+                const nextGroup = groupResultsCount >= maxForGroup ? "" : (state && state.currentGroup ? state.currentGroup : "");
+
+                updateState({
+                    ...state,
+                    currentGroup: nextGroup,
+                    lastActiveGroup: (state && state.currentGroup) ? state.currentGroup : (state && state.lastActiveGroup ? state.lastActiveGroup : ""),
+                    results: newResults,
+                    remainingClasses: ((state && Array.isArray(state.remainingClasses)) ? state.remainingClasses : []).filter(c => c && c !== selectedClass),
+                    remainingCountries: ((state && Array.isArray(state.remainingCountries)) ? state.remainingCountries : []).filter(c => c && selectedCountry && c.code !== selectedCountry.code),
+                    currentDraw: { stage: 0, selectedClass: null, selectedCountry: null }
+                });
+
+                setSelectedClassInput("");
+                setSelectedCountryInput(null);
+                setSearchCountry("");
+                setSearchClass("");
+            };
+
+            const handleCancel = () => {
+                updateState({
+                    ...state,
+                    currentDraw: { stage: 0, selectedClass: null, selectedCountry: null }
+                });
+                setSelectedClassInput("");
+                setSelectedCountryInput(null);
+            };
+
+            const handleRemoveResult = (resultToRemove) => {
+                const remainingClasses = state?.remainingClasses || [];
+                const remainingCountries = state?.remainingCountries || [];
+                const results = state?.results || [];
+
+                const newRemainingClasses = [...remainingClasses, resultToRemove.class]
+                    .sort((a, b) => INITIAL_CLASSES.indexOf(a) - INITIAL_CLASSES.indexOf(b));
+
+                const newRemainingCountries = [...remainingCountries, resultToRemove.country]
+                    .sort((a, b) => INITIAL_COUNTRIES.findIndex(c => c && c.code === a.code) - INITIAL_COUNTRIES.findIndex(c => c && c.code === b.code));
+
+                const newResults = results.filter(r => r && r.class !== resultToRemove.class);
+
+                updateState({
+                    ...state,
+                    results: newResults,
+                    remainingClasses: newRemainingClasses,
+                    remainingCountries: newRemainingCountries,
+                });
+            };
+
+            return (
+                <div className="flex flex-col h-screen overflow-hidden relative z-10 p-2 lg:p-3 gap-3">
+                    {/* Admin Header */}
+                    <header className="glass rounded-xl p-2.5 px-4 flex justify-between items-center shrink-0 border-white/10">
+                        <div className="flex items-center gap-3">
+                            <div className="glass-light p-2 rounded-lg border-emerald-500/30 text-emerald-400"><Settings className="w-4 h-4" /></div>
+                            <div>
+                                <h1 className="text-sm font-bold text-white uppercase">Control Panel (Admin)</h1>
+                                <div className="flex items-center gap-1.5 text-[10px] mt-0.5">
+                                    <span className="relative flex h-1.5 w-1.5">
+                                        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isConnected ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
+                                        <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${isConnected ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
+                                    </span>
+                                    <span className="text-white/50">{isConnected ? 'Live signal broadcasting' : 'Searching for signal...'}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+
+
+                            <button onClick={() => setAppMode('summary')} className="text-xs font-semibold text-cyan-400 flex items-center gap-1.5 hover:bg-white/10 px-3 py-1.5 rounded-lg glass-light transition border-white/10">
+                                <LayoutGrid className="w-3.5 h-3.5" /> Summary
+                            </button>
+                            <button onClick={() => setAppMode('presentation')} className="text-xs font-semibold text-amber-400 flex items-center gap-1.5 hover:bg-white/10 px-3 py-1.5 rounded-lg glass-light transition border-white/10">
+                                <MonitorPlay className="w-3.5 h-3.5" /> Go to Presentation
+                            </button>
+                            <button onClick={() => setAppMode(null)} className="text-xs text-white/50 px-3 py-1.5 rounded-lg glass hover:bg-white/10 transition border-white/10">
+                                Exit
+                            </button>
+                        </div>
+                    </header>
+
+                    <div className="flex flex-1 overflow-hidden gap-3">
+                        {/* Main Input Panel */}
+                        <div className="flex-1 p-3 sm:p-4 lg:p-6 flex flex-col gap-3 overflow-y-auto custom-scrollbar glass rounded-2xl lg:rounded-[32px] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] relative z-20">
+
+                            <div className="glass-light rounded-xl p-3 lg:p-4 relative flex-1 flex flex-col justify-between border-white/10">
+
+                                <div>
+                                    <h2 className="text-base font-black text-white uppercase mb-3 flex items-center gap-2">
+                                        <span className="glass-active border-red-500/50 p-1 rounded-md"><Radio className="w-3 h-3 text-red-400" /></span>
+                                        Broadcasting Area
+                                    </h2>
+
+                                    {/* VIEW MODES */}
+                                    <div className="glass rounded-xl p-3 mb-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-white/10">
+                                        <label className="block text-[9px] uppercase text-amber-400 font-bold mb-2">Broadcasting Mode</label>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <button
+                                                onClick={() => handleGroupSelect("")}
+                                                className={`py-2 rounded-xl text-[10px] font-black uppercase transition-all flex items-center justify-center gap-2 ${!state.currentGroup ? 'bg-amber-500 text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]' : 'glass hover:bg-white/10 text-white border-white/10'}`}
+                                            >
+                                                <LayoutGrid className="w-3.5 h-3.5" /> View Summary (All)
+                                            </button>
+                                            <button
+                                                onClick={() => handleGroupSelect(state.lastActiveGroup || 'A')}
+                                                className={`py-2 rounded-xl text-[10px] font-black uppercase transition-all flex items-center justify-center gap-2 ${state.currentGroup ? 'bg-amber-500 text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]' : 'glass hover:bg-white/10 text-white border-white/10'}`}
+                                            >
+                                                <Maximize2 className="w-3.5 h-3.5" /> View Active Detail
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* GROUP FILTER (Dynamic Buttons) */}
+                                    <div className="glass rounded-xl p-3 mb-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-white/5">
+                                        <label className="block text-[9px] uppercase text-emerald-400 font-bold mb-2">0. Select Group to Draw or Pin</label>
+                                        <div className="flex flex-wrap gap-2 text-white">
+                                            {GROUPS_ALL.map(g => {
+                                                const max = g === 'L' ? 3 : 4;
+                                                const results = (state && Array.isArray(state.results)) ? state.results : [];
+                                                const currentInGroup = results.filter(r => r && r.group === g).length;
+                                                const isFinished = currentInGroup >= max;
+                                                const isSelected = state?.currentGroup === g;
+                                                const currentDraw = state?.currentDraw || {};
+
+                                                return (
+                                                    <button
+                                                        key={g}
+                                                        onClick={() => handleGroupSelect(g)}
+                                                        className={`px-3 py-1.5 font-bold text-xs transition-all rounded-lg ${isSelected ? 'glass-active text-amber-400 scale-105 border-amber-500/50' : isFinished ? 'glass border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10' : 'glass hover:bg-white/10 text-white'}`}
+                                                    >
+                                                        {g} {isFinished && '✓'}
+                                                    </button>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 text-white">
+                                        {/* Column 1: Input Class */}
+                                        <div className={`p-3 glass rounded-xl relative transition-opacity border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] ${!state?.currentGroup ? 'opacity-40 pointer-events-none' : ''}`}>
+                                            <label className="block text-[9px] uppercase text-emerald-400 font-bold mb-1.5">1. Select Drawn Class / Room</label>
+
+                                            <div className="relative mb-2">
+                                                <div
+                                                    className={`w-full glass-light rounded-lg p-2 text-xs text-white font-bold flex items-center justify-between cursor-pointer border-white/20 ${(state?.currentDraw?.stage || 0) >= 1 ? 'opacity-50 pointer-events-none' : ''} ${isClassDropdownOpen ? 'border-emerald-500 shadow-[0_0_15px_rgba(52,211,153,0.3)]' : ''}`}
+                                                    onClick={() => setIsClassDropdownOpen(!isClassDropdownOpen)}
+                                                >
+                                                    {selectedClassInput ? (
+                                                        <span className="text-emerald-300 truncate pr-2">{selectedClassInput}</span>
+                                                    ) : (
+                                                        <span className="text-white/40 font-normal">
+                                                            {state?.currentGroup ? `-- Slot for Grp ${state.currentGroup} --` : '-- Wait for Group --'}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {isClassDropdownOpen && (
+                                                    <div className="absolute top-full left-0 w-full mt-1.5 glass rounded-xl shadow-2xl overflow-hidden z-20 backdrop-blur-2xl border-white/20">
+                                                        <div className="p-1.5 border-b border-white/10 glass-light">
+                                                            <div className="relative">
+                                                                <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-white/50" />
+                                                                <input
+                                                                    type="text"
+                                                                    autoFocus
+                                                                    placeholder={`Search classes...`}
+                                                                    value={searchClass}
+                                                                    onChange={(e) => setSearchClass(e.target.value)}
+                                                                    className="w-full bg-transparent border border-white/20 rounded-lg py-1.5 pl-8 pr-2 text-xs text-white focus:outline-none focus:border-emerald-500"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="max-h-32 overflow-y-auto custom-scrollbar bg-black/50">
+                                                            {filteredClasses.length === 0 ? (
+                                                                <div className="p-2 text-center text-white/50 text-xs">No available slots</div>
+                                                            ) : (
+                                                                filteredClasses.map(c => (
+                                                                    <div
+                                                                        key={c}
+                                                                        onClick={() => { setSelectedClassInput(c); setIsClassDropdownOpen(false); setSearchClass(""); }}
+                                                                        className="p-2 border-b border-white/5 hover:bg-white/10 flex items-center gap-2 cursor-pointer transition-colors font-bold text-xs text-white/90"
+                                                                    >
+                                                                        {c}
+                                                                    </div>
+                                                                ))
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <button
+                                                onClick={handleRevealClass}
+                                                disabled={!selectedClassInput || state.currentDraw.stage >= 1 || (state?.results || []).filter(r => r.group === state.currentGroup).length >= (state.currentGroup === 'L' ? 3 : 4)}
+                                                className="w-full py-2 rounded-lg text-xs font-bold uppercase transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-emerald-600/80 hover:bg-emerald-500 border border-emerald-400/50 text-white flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(52,211,153,0.3)]"
+                                            >
+                                                <MonitorPlay className="w-3.5 h-3.5" /> Push Class
+                                            </button>
+                                        </div>
+
+                                        {/* Column 2: Input Country */}
+                                        <div className={`p-3 glass rounded-xl relative z-10 transition-opacity border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] ${!state.currentGroup ? 'opacity-40 pointer-events-none' : ''}`}>
+                                            <label className="block text-[9px] uppercase text-amber-400 font-bold mb-1.5">2. Select Drawn Team</label>
+
+                                            <div className="relative mb-2 text-white">
+                                                <div
+                                                    className={`w-full glass-light rounded-lg p-2 text-xs text-white font-bold flex items-center justify-between cursor-pointer border-white/20 ${state.currentDraw.stage >= 2 ? 'opacity-50 pointer-events-none' : ''} ${isDropdownOpen ? 'border-amber-500 shadow-[0_0_15px_rgba(251,191,36,0.3)]' : ''}`}
+                                                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                                >
+                                                    {selectedCountryInput ? (
+                                                        <div className="flex items-center justify-end gap-2 truncate pr-2 w-full text-amber-300">
+                                                            <span className="truncate flex-1 text-right">{selectedCountryInput.name}</span>
+                                                            <img src={getFlagUrl(selectedCountryInput.code)} alt="" className="w-4 h-3 object-cover rounded border border-white/20 shrink-0" />
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-white/40 font-normal">-- Search team --</span>
+                                                    )}
+                                                </div>
+
+                                                {isDropdownOpen && (
+                                                    <div className="absolute top-full left-0 w-full mt-1.5 glass rounded-xl shadow-2xl overflow-hidden z-20 backdrop-blur-2xl border-white/20">
+                                                        <div className="p-1.5 border-b border-white/10 glass-light">
+                                                            <div className="relative">
+                                                                <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-white/50" />
+                                                                <input
+                                                                    type="text"
+                                                                    autoFocus
+                                                                    placeholder="Enter country..."
+                                                                    value={searchCountry}
+                                                                    onChange={(e) => setSearchCountry(e.target.value)}
+                                                                    className="w-full bg-transparent border border-white/20 rounded-lg py-1.5 pl-8 pr-2 text-xs text-white focus:outline-none focus:border-amber-500"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="max-h-32 overflow-y-auto custom-scrollbar bg-black/50">
+                                                            {filteredCountries.length === 0 ? (
+                                                                <div className="p-2 text-center text-white/50 text-xs">Country not found</div>
+                                                            ) : (
+                                                                filteredCountries.map(country => (
+                                                                    <div
+                                                                        key={country.code}
+                                                                        onClick={() => { setSelectedCountryInput(country); setIsDropdownOpen(false); setSearchCountry(""); }}
+                                                                        className="p-2 border-b border-white/5 hover:bg-white/10 flex items-center justify-end gap-2 cursor-pointer transition-colors text-xs"
+                                                                    >
+                                                                        <span className="font-semibold text-white/90 flex-1 text-right pr-1">{country.name}</span>
+                                                                        <img src={getFlagUrl(country.code)} alt="" className="w-5 h-3.5 object-cover rounded border border-white/20 shrink-0" />
+                                                                    </div>
+                                                                ))
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <button
+                                                onClick={handleRevealCountry}
+                                                disabled={!selectedCountryInput || (state?.currentDraw?.stage || 0) < 1 || (state?.currentDraw?.stage || 0) >= 2 || (state?.results || []).filter(r => r.group === state.currentGroup).length >= (state.currentGroup === 'L' ? 3 : 4)}
+                                                className="w-full py-2 rounded-lg text-xs font-bold uppercase transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-amber-600/80 hover:bg-amber-500 border border-amber-400/50 text-white flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(251,191,36,0.3)]"
+                                            >
+                                                <MonitorPlay className="w-3.5 h-3.5" /> Push Team
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Total Actions */}
+                                <div className="mt-2 pt-3 border-t border-white/10 flex justify-end gap-3 shrink-0">
+                                    <button
+                                        onClick={handleCancel}
+                                        disabled={(state?.currentDraw?.stage || 0) === 0}
+                                        className="px-4 py-1.5 rounded-lg font-bold uppercase text-white/60 glass-light hover:bg-white/10 disabled:opacity-30 transition-all flex items-center gap-1.5 text-xs border-white/10"
+                                    >
+                                        <X className="w-3.5 h-3.5" /> Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleConfirm}
+                                        disabled={(state?.currentDraw?.stage || 0) !== 2}
+                                        className="px-6 py-1.5 rounded-lg font-black text-xs uppercase flex items-center justify-center gap-1.5 transition-all disabled:opacity-30 disabled:cursor-not-allowed glass-active text-amber-100 hover:text-white"
+                                    >
+                                        <Check className="w-4 h-4" /> Confirm & Save
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Data Status */}
+                            <div className="flex gap-2 shrink-0">
+                                <div className="flex-1 glass rounded-xl p-2.5 border-white/10">
+                                    <p className="text-[9px] sm:text-[10px] text-white/50 uppercase font-bold mb-0.5">Remaining Slots</p>
+                                    <p className="text-lg font-black text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]">{(state?.remainingClasses || []).length}</p>
+                                </div>
+                                <div className="flex-1 glass rounded-xl p-2.5 border-white/10">
+                                    <p className="text-[9px] sm:text-[10px] text-white/50 uppercase font-bold mb-0.5">Remaining Teams</p>
+                                    <p className="text-lg font-black text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]">{(state?.remainingCountries || []).length}</p>
+                                </div>
+                                <div className="flex-1 glass rounded-xl p-2.5 border-white/10">
+                                    <p className="text-[9px] sm:text-[10px] text-white/50 uppercase font-bold mb-0.5">Total Confirmed</p>
+                                    <p className="text-lg font-black text-amber-300 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]">{(state?.results || []).length} / 47</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* RIGHT SIDEBAR: Tree View */}
+                        <div className="w-[300px] flex flex-col gap-3 glass rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+                            <div className="p-3 border-b border-white/10 glass-light rounded-t-2xl">
+                                <h3 className="text-sm font-black uppercase text-amber-400 flex items-center gap-2">
+                                    <ListOrdered className="w-4 h-4" /> Draw Results (Edit)
+                                </h3>
+                            </div>
+                            <GroupTreeView state={state} autoScrollRef={autoScrollRef} onRemoveResult={handleRemoveResult} />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================================
+        // 2. PRESENTATION VIEW
+        // ============================================================================
+        function PresentationView({ state, isConnected, setAppMode }) {
+            console.log("Rendering PresentationView, state:", state);
+            const { currentDraw: rawCurrentDraw, results: rawResults, currentGroup = "", lastActiveGroup = "" } = state || {};
+            const currentDraw = rawCurrentDraw || { stage: 0 };
+            const results = rawResults || [];
+            const autoScrollRef = useRef(null);
+
+            const targetGroup = currentGroup || lastActiveGroup;
+
+            // Scroll Sidebar to active group
+            useEffect(() => {
+                if (autoScrollRef.current) {
+                    autoScrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }, [currentGroup]);
+
+            return (
+                <div className="relative w-full h-screen overflow-hidden flex flex-col p-4 lg:p-6 gap-6 z-10 text-white bg-black">
+                    <GlobalBackground />
+
+                    {/* Hidden exit button */}
+                    <div className="absolute top-6 left-6 z-50 opacity-0 hover:opacity-100 transition-opacity flex gap-2">
+                        <button onClick={() => setAppMode(null)} className="glass hover:bg-white/10 px-4 py-2 rounded-xl text-sm transition border-white/10 flex items-center gap-2">
+                            ← Menu
+                        </button>
+                        <button onClick={() => setAppMode('admin')} className="glass hover:bg-white/10 px-4 py-2 rounded-xl text-cyan-300 text-sm flex items-center gap-2 transition border-white/10">
+                            <Settings className="w-4 h-4" /> Go to Admin
+                        </button>
+                        <button onClick={() => setAppMode('summary')} className="glass hover:bg-white/10 px-4 py-2 rounded-xl text-amber-300 text-sm flex items-center gap-2 transition border-white/10">
+                            <LayoutGrid className="w-4 h-4" /> View Summary
+                        </button>
+                    </div>
+
+                    {/* --- HEADER PRESENTATION --- */}
+                    <header className="glass rounded-[40px] px-8 py-5 flex items-center justify-between shadow-[0_30px_60px_rgba(0,0,0,0.6)] border border-white/10 relative z-30 transition-all presentation-header shine-effect">
+                        <div className="flex items-center gap-6">
+                            <div className="relative flex items-center justify-center">
+                                <img src="hình ảnh/logo WORLDCUP2026.png" className="h-12 lg:h-16 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]" alt="World Cup 2026" />
+                            </div>
+                            <div className="flex flex-col">
+                                <h1 className="text-2xl lg:text-4xl font-black uppercase tracking-tighter leading-none">
+                                    <span className="text-gradient-gold">EMASI</span>
+                                    <span className="text-white ml-2">WORLD CUP</span> <span className="text-emerald-400 drop-shadow-[0_0_15px_rgba(52,211,153,0.3)]">2026™</span>
+                                </h1>
+                                <div className="flex items-center gap-2 mt-1">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                                    <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">Official Draw Management System</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-8">
+                            <div className="flex flex-col items-end">
+                                <span className="text-[10px] font-black uppercase text-amber-400 tracking-widest mb-1">Live Protocol</span>
+                                <div className="flex items-center gap-4 glass-light rounded-2xl px-6 py-2 shadow-inner border border-white/5">
+                                    <span className="font-black text-2xl text-white tracking-tighter">{results.length} <span className="text-white/20">/ 47</span></span>
+                                </div>
+                            </div>
+                            <img src="hình ảnh/logo EMASI.png" alt="EMASI" className="h-10 lg:h-14 w-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
+                        </div>
+                    </header>
+
+                    {/* --- MAIN DISPLAY AREA (LAYOUT 3.0) --- */}
+                    <div className="relative z-10 flex-1 p-4 lg:p-8 overflow-hidden flex items-center justify-center">
+                        {!currentGroup && !results.length ? (
+                            /* STAGE 0: STANDBY (Only if nothing selected and no results) */
+                            <div className="flex flex-col items-center animate-[fadeIn_0.8s_ease-out]">
+                                <div className="relative w-64 h-64 flex items-center justify-center mb-12">
+                                    <div className="absolute inset-0 bg-amber-400/10 blur-[80px] rounded-full animate-pulse-slow"></div>
+                                    <div className="absolute inset-0 border-2 border-dashed border-amber-500/20 rounded-full animate-[spin_20s_linear_infinite]"></div>
+                                    <img src="hình ảnh/logo WORLDCUP2026.png" className="h-40 w-auto object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.6)] z-20 animate-float" alt="World Cup 2026" />
+                                </div>
+                                <div className="glass-light px-8 py-4 rounded-full border border-white/10 flex items-center gap-3">
+                                    <div className="w-3 h-3 rounded-full bg-red-500 animate-[pulse_1s_infinite]"></div>
+                                    <h2 className="text-xl font-black text-white/70 uppercase tracking-[0.3em] overflow-hidden whitespace-nowrap border-r-2 border-white/40 pr-1 animate-[typing_3.5s_steps(20,end)_infinite,blink-caret_.75s_step-end_infinite]">
+                                        Awaiting Signal...
+                                    </h2>
+                                </div>
+                            </div>
+                        ) : (
+                            /* --- MAIN DISPLAY AREA (LAYOUT 3.0 FINAL) --- */
+                            <div className="relative z-10 flex-1 p-4 lg:p-8 overflow-hidden flex items-center justify-center">
+                                {/* 1. THE PERSISTENT 3x4 GRID (Background Layer) */}
+                                <div className="grid grid-cols-4 grid-rows-3 gap-6 lg:gap-8 w-full h-full max-w-[1700px] max-h-[900px] relative transition-all duration-1000">
+                                    {GROUPS_ALL.map((g, idx) => {
+                                        const groupResults = (results && Array.isArray(results)) ? results.filter(r => r && r.group === g) : [];
+                                        const isVisible = groupResults.length > 0;
+                                        // Hide the grid box if it's currently active in the overlay
+                                        const isBeingDrawn = currentGroup === g;
+
+                                        return (
+                                            <div key={g} className={`relative transition-all duration-1000 ${isVisible && !isBeingDrawn ? 'opacity-100 scale-100' : 'opacity-0 scale-50 pointer-events-none'}`}>
+                                                <GroupBox groupId={g} state={state} />
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* 2. THE CINEMATIC REVEAL OVERLAY (Active Layer) */}
+                                {currentGroup && (
+                                    <div className="fixed inset-0 z-[100] flex items-center justify-center animate-[fadeIn_0.5s_ease-out]" key={currentGroup}>
+                                        {/* Dark Backdrop */}
+                                        <div className="absolute inset-0 bg-black/80 backdrop-blur-3xl"></div>
+
+                                        {/* Content Area - WIDENED FOR HORIZONTAL CLARITY */}
+                                        <div className="relative z-10 w-full max-w-7xl flex flex-col items-center pt-20">
+                                            {(currentDraw?.stage || 0) === 0 ? (
+                                                /* STAGE 0: RECAP / THE TABLE ITSELF - WIDENED & BALANCED SCALE */
+                                                <div className="animate-[popIn_0.8s_ease-out] w-full max-w-4xl">
+                                                    <div className="transform scale-[1.7] origin-center transition-all duration-1000 drop-shadow-[0_0_120px_rgba(212,175,55,0.4)]">
+                                                        <GroupBox groupId={currentGroup} state={state} forceActive={true} />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                /* STAGE 1 & 2: REVEAL CLASS & COUNTRY */
+                                                <div className="w-full flex flex-col items-center animate-[fadeIn_0.5s_ease-out]">
+                                                    <div className="mb-6 text-center">
+                                                        <h3 className="text-6xl lg:text-8xl font-black text-gradient-gold uppercase tracking-wider drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">
+                                                            GROUP {currentGroup}
+                                                        </h3>
+                                                    </div>
+
+                                                    <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20 w-full">
+                                                        {/* CLASS CARD */}
+                                                        <div className="w-full lg:w-[500px] group transition-all duration-700">
+                                                            <div className={`relative glass-active rounded-[50px] p-10 flex flex-col items-center justify-center border-2 border-amber-400/50 shadow-[0_40px_100px_rgba(0,0,0,0.9),0_0_50px_rgba(212,175,55,0.2)] shine-effect min-h-[350px] animate-[popIn_0.6s_cubic-bezier(0.175,0.885,0.32,1.275)]`}>
+                                                                <div className="absolute top-6 left-10 text-amber-400/40 text-xs font-black uppercase">POT SLOT</div>
+                                                                <h3 className={`font-black text-white text-center uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.5)] leading-tight px-4 ${(currentDraw?.selectedClass || "").length > 10 ? 'text-4xl lg:text-5xl' :
+                                                                    (currentDraw?.selectedClass || "").length > 6 ? 'text-5xl lg:text-6xl' :
+                                                                        'text-6xl lg:text-7xl'
+                                                                    }`}>
+                                                                    {currentDraw?.selectedClass}
+                                                                </h3>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* ICON / MATCHING */}
+                                                        <div className={`transition-all duration-1000 transform ${currentDraw?.stage === 2 ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-50 rotate-180'}`}>
+                                                            <div className="w-20 h-20 rounded-full glass-active border-2 border-amber-400/50 flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.4)]">
+                                                                <Play className="w-10 h-10 text-amber-400 fill-amber-400" />
+                                                            </div>
+                                                        </div>
+
+                                                        {/* COUNTRY CARD */}
+                                                        <div className={`w-full lg:w-[500px] transition-all duration-1000 transform ${currentDraw?.stage === 2 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-40'}`}>
+                                                            {currentDraw?.selectedCountry && (
+                                                                <div className="relative glass rounded-[50px] p-10 flex flex-col items-center justify-center border-2 border-emerald-400/30 shadow-[0_40px_100px_rgba(0,0,0,0.9),0_0_50px_rgba(52,211,153,0.1)] shine-effect min-h-[350px]">
+                                                                    <div className="absolute top-6 right-10 text-emerald-400/40 text-xs font-black uppercase italic">REPRESENTING</div>
+
+                                                                    {/* NAME BEFORE FLAG */}
+                                                                    <h3 className={`font-black text-emerald-400 uppercase drop-shadow-[0_0_30px_rgba(52,211,153,0.6)] text-center leading-tight mb-8 px-4 ${(currentDraw?.selectedCountry?.name || "").length > 12 ? 'text-3xl lg:text-4xl' :
+                                                                        'text-5xl lg:text-6xl'
+                                                                        }`}>
+                                                                        {currentDraw?.selectedCountry?.name}
+                                                                    </h3>
+                                                                    <img
+                                                                        src={getFlagUrl(currentDraw?.selectedCountry?.code)}
+                                                                        className="w-48 h-auto object-cover rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.8)] border-2 border-white/20"
+                                                                        alt="flag"
+                                                                    />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // ============================================================================
+        // 3. SUMMARY VIEW (GROUP STAGE)
+        // ============================================================================
+        function SummaryView({ state, isConnected, setAppMode }) {
+            console.log("Rendering SummaryView, state:", state);
+            const groupsAll = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+
+            return (
+                <div className="min-h-screen lg:h-screen bg-black text-white overflow-y-auto lg:overflow-hidden relative selection:bg-amber-500 selection:text-white z-10 font-sans flex items-center justify-center p-4 lg:p-6 2xl:p-8">
+                    <GlobalBackground />
+
+                    {/* Exit/Nav buttons in corner */}
+                    <div className="absolute top-4 left-4 lg:top-6 lg:left-6 z-50 flex gap-2">
+                        <button onClick={() => setAppMode(null)} className="glass-light hover:bg-white/10 text-white px-3 py-1.5 lg:px-4 lg:py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 border-white/10 shadow-sm">
+                            ← Menu
+                        </button>
+                    </div>
+
+                    <div className="relative z-10 w-full max-w-[1900px] h-full flex flex-col lg:flex-row items-center gap-4 lg:gap-8 2xl:gap-12 mt-12 lg:mt-0">
+
+                        {/* LEFT COLUMN: TITLE & LOGO */}
+                        <div className="lg:w-[20%] xl:w-[18%] flex flex-col items-center justify-center shrink-0">
+                            <div className="mb-4 lg:mb-8 flex items-center justify-center">
+                                <img src="hình ảnh/logo EMASI.png" alt="EMASI Logo" className="h-12 lg:h-16 w-auto object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]" />
+                            </div>
+
+                            <div className="relative w-32 h-32 lg:w-40 lg:h-40 mb-4 flex items-center justify-center">
+                                <div className="absolute inset-0 bg-amber-400/20 blur-[40px] rounded-full mix-blend-screen animate-pulse pointer-events-none"></div>
+                                <img src="hình ảnh/logo WORLDCUP2026.png" className="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(255,255,255,0.6)] relative z-10 opacity-95" alt="World Cup 2026" />
+                            </div>
+
+                            <div className="text-center flex flex-col items-center px-4 lg:px-0">
+                                <h1 className="text-xl lg:text-3xl 2xl:text-5xl font-black uppercase text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] leading-tight">
+                                    <span className="text-transparent bg-clip-text text-gradient-gold">EMASI</span> WORLD CUP
+                                </h1>
+                                <h2 className="text-[10px] lg:text-base 2xl:text-xl font-black uppercase tracking-widest text-[#B5C2B7] mt-1 mb-1 opacity-80">
+                                    2026™ DRAW
+                                </h2>
+                                <h3 className="text-xl lg:text-3xl 2xl:text-4xl font-black uppercase text-[#CEE002] drop-shadow-[0_0_15px_rgba(206,224,2,0.6)] mt-1">
+                                    PREDICTIONS
+                                </h3>
+                            </div>
+                        </div>
+
+                        {/* RIGHT COLUMN: 3x4 GRID OF GROUPS (Fits 12 groups) */}
+                        <div className="w-full lg:w-[75%] xl:w-[78%] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-4 2xl:gap-6 max-h-full content-center py-4 grid-container">
+                            {groupsAll.map(g => (
+                                <GroupBox key={g} groupId={g} state={state} />
+                            ))}
+                        </div>
+
+                    </div>
+                </div>
+            );
+        }
+
+        const GroupBox = ({ groupId, state, forceActive }) => {
+            const maxSlots = groupId === 'L' ? 3 : 4;
+            const results = (state && Array.isArray(state.results)) ? state.results : [];
+            const groupResults = results.filter(r => r && r.group === groupId);
+
+            const isCurrent = state?.currentGroup === groupId;
+            const isCompleted = groupResults.length >= maxSlots;
+            const isActive = isCurrent || forceActive;
+
+            return (
+                <div className={`flex flex-col w-full transition-all duration-700 ${isActive ? 'scale-105 z-20' : ''}`}>
+                    {/* Header */}
+                    <div className="flex items-center justify-between px-1.5 mb-1 relative">
+                        <div className={`font-black uppercase transition-all duration-700 ${isActive ? 'text-2xl text-gradient-gold lg:text-3xl' : 'text-xs text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.3)]'}`}>
+                            GROUP {groupId}
+                        </div>
+                        {isActive && <div className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>}
+                        {!isActive && isCompleted && <CheckCircle2 className="w-3 h-3 text-emerald-400 opacity-80" />}
+                    </div>
+
+                    {/* Rows */}
+                    <div className={`flex flex-col gap-1 w-full glass p-2 rounded-2xl border transition-all duration-700 ${isActive ? 'border-amber-400/50 bg-amber-400/5 shadow-2xl' : isCompleted ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-white/10'}`}>
+                        {['1', '2', '3', '4'].slice(0, maxSlots).map((sub, idx) => {
+                            const result = groupResults[idx];
+
+                            return (
+                                <div key={sub} className={`flex items-center rounded-lg overflow-hidden glass-light border border-white/5 ${isActive ? 'h-12 2xl:h-16' : 'h-7 2xl:h-9'}`}>
+                                    {/* CLASS - WIDER & ALWAYS UPPERCASE */}
+                                    <div className={`flex items-center justify-center shrink-0 border-r border-white/5 font-bold whitespace-nowrap px-4 uppercase ${isActive ? 'w-56 2xl:w-80 text-lg lg:text-xl 2xl:text-3xl text-amber-400' : 'w-16 2xl:w-24 text-[10px] text-white/80'}`}>
+                                        {result?.class || sub}
+                                    </div>
+
+                                    {/* TEAM NAME - MORE HORIZONTAL PADDING */}
+                                    <div className="flex-1 min-w-0 px-6 h-full flex items-center justify-start">
+                                        {result?.country ? (
+                                            <span className={`text-white font-black truncate uppercase ${isActive ? 'text-lg lg:text-xl 2xl:text-3xl' : 'text-xs italic text-white'}`}>
+                                                {result.country.name}
+                                            </span>
+                                        ) : (
+                                            <div className="w-8 h-0.5 bg-white/10 rounded-full"></div>
+                                        )}
+                                    </div>
+
+                                    {/* FLAG - ENLARGED */}
+                                    <div className={`h-full flex items-center justify-center shrink-0 bg-black/10 ${isActive ? 'w-24 2xl:w-36' : 'w-10 2xl:w-12'}`}>
+                                        {result?.country ? (
+                                            <img src={getFlagUrl(result.country.code)} className={`${isActive ? 'w-14 h-8 2xl:w-20 2xl:h-12' : 'w-6 h-4'} object-cover rounded shadow-sm`} alt="flag" />
+                                        ) : (
+                                            <div className="w-4 h-2.5 bg-white/5 rounded"></div>
+                                        )}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            )
+        }
+
+        // Render Application
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<ErrorBoundary><App /></ErrorBoundary>);
+    </script>
+</body>
+
+</html>
