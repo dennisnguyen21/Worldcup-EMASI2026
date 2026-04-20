@@ -679,14 +679,34 @@
             if (!state) return <div className="p-10 text-white/50 italic">Initialising state...</div>;
 
             const countries = (state && Array.isArray(state.remainingCountries)) ? state.remainingCountries : [];
-            const filteredCountries = countries.filter(c =>
-                c && c.name && c.name.toLowerCase().includes((searchCountry || "").toLowerCase())
-            );
+            const filteredCountries = React.useMemo(() => {
+                const term = (searchCountry || "").trim().toLowerCase();
+                // De-duplicate by code first
+                const unique = Array.from(new Map(countries.filter(c => c && c.code).map(c => [c.code, c])).values());
+                return unique
+                    .filter(c => c.name.toLowerCase().includes(term))
+                    .sort((a, b) => a.name.localeCompare(b.name));
+            }, [countries, searchCountry]);
 
             const classes = (state && Array.isArray(state.remainingClasses)) ? state.remainingClasses : [];
-            const filteredClasses = classes.filter(c => {
-                return c && c.toLowerCase().includes((searchClass || "").toLowerCase());
-            });
+            const filteredClasses = React.useMemo(() => {
+                const term = (searchClass || "").trim().toLowerCase();
+                return [...new Set(classes)]
+                    .filter(c => {
+                        if (!c) return false;
+                        // Only show ALL CAPS classes/departments as requested
+                        if (c !== c.toUpperCase()) return false;
+                        return c.toLowerCase().includes(term);
+                    })
+                    .sort((a, b) => {
+                        const idxA = INITIAL_CLASSES.indexOf(a);
+                        const idxB = INITIAL_CLASSES.indexOf(b);
+                        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                        if (idxA !== -1) return -1;
+                        if (idxB !== -1) return 1;
+                        return a.localeCompare(b);
+                    });
+            }, [classes, searchClass]);
 
             // --- ACTIONS ---
 
@@ -735,7 +755,7 @@
                     currentGroup: nextGroup,
                     lastActiveGroup: (state && state.currentGroup) ? state.currentGroup : (state && state.lastActiveGroup ? state.lastActiveGroup : ""),
                     results: newResults,
-                    remainingClasses: ((state && Array.isArray(state.remainingClasses)) ? state.remainingClasses : []).filter(c => c && c !== selectedClass),
+                    remainingClasses: [...new Set(((state && Array.isArray(state.remainingClasses)) ? state.remainingClasses : []).filter(c => c && c !== selectedClass))],
                     remainingCountries: ((state && Array.isArray(state.remainingCountries)) ? state.remainingCountries : []).filter(c => c && selectedCountry && c.code !== selectedCountry.code),
                     currentDraw: { stage: 0, selectedClass: null, selectedCountry: null }
                 });
@@ -760,11 +780,16 @@
                 const remainingCountries = state?.remainingCountries || [];
                 const results = state?.results || [];
 
-                const newRemainingClasses = [...remainingClasses, resultToRemove.class]
+                const newRemainingClasses = [...new Set([...remainingClasses, resultToRemove.class])]
                     .sort((a, b) => INITIAL_CLASSES.indexOf(a) - INITIAL_CLASSES.indexOf(b));
 
-                const newRemainingCountries = [...remainingCountries, resultToRemove.country]
-                    .sort((a, b) => INITIAL_COUNTRIES.findIndex(c => c && c.code === a.code) - INITIAL_COUNTRIES.findIndex(c => c && c.code === b.code));
+                const newRemainingCountries = Array.from(new Map([...remainingCountries, resultToRemove.country].map(c => [c.code, c])).values())
+                    .sort((a, b) => {
+                        const idxA = INITIAL_COUNTRIES.findIndex(c => c && c.code === a.code);
+                        const idxB = INITIAL_COUNTRIES.findIndex(c => c && c.code === b.code);
+                        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                        return a.name.localeCompare(b.name);
+                    });
 
                 const newResults = results.filter(r => r && r.class !== resultToRemove.class);
 
@@ -962,7 +987,9 @@
                                                         </div>
                                                         <div className="max-h-32 overflow-y-auto custom-scrollbar bg-black/50">
                                                             {filteredCountries.length === 0 ? (
-                                                                <div className="p-2 text-center text-white/50 text-xs">Country not found</div>
+                                                                <div className="p-2 text-center text-white/50 text-xs italic">
+                                                                    {searchCountry ? `No match for "${searchCountry}"` : "Please select or search..."}
+                                                                </div>
                                                             ) : (
                                                                 filteredCountries.map(country => (
                                                                     <div
