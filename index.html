@@ -676,7 +676,7 @@
                         <AdminView state={sharedState} updateState={updateSharedState} isConnected={isConnected} setAppMode={setAppMode} setPresentationScreen={setPresentationScreen} />
                     )}
                     {appMode === 'presentation' && (
-                        <PresentationView state={sharedState} isConnected={isConnected} setAppMode={setAppMode} screen={presentationScreen} />
+                        <PresentationView state={sharedState} isConnected={isConnected} setAppMode={setAppMode} screen={presentationScreen} setPresentationScreen={setPresentationScreen} />
                     )}
                     {appMode === 'summary' && (
                         <SummaryView state={sharedState} isConnected={isConnected} setAppMode={setAppMode} />
@@ -1101,7 +1101,7 @@
         // ============================================================================
         // 2. PRESENTATION VIEW
         // ============================================================================
-        function PresentationView({ state, isConnected, setAppMode, screen }) {
+        function PresentationView({ state, isConnected, setAppMode, screen, setPresentationScreen }) {
             console.log(`Rendering PresentationView (Screen ${screen}), state:`, state);
             const { currentDraw: rawCurrentDraw, results: rawResults, currentGroup = "", lastActiveGroup = "" } = state || {};
             const currentDraw = rawCurrentDraw || { stage: 0 };
@@ -1138,9 +1138,9 @@
                         </button>
                         <button
                             onClick={() => { setPresentationScreen(screen === 1 ? 2 : 1); }}
-                            className="glass hover:bg-white/10 px-4 py-2 rounded-xl text-emerald-300 text-sm flex items-center gap-2 transition border-white/10"
+                            className="glass hover:bg-white/10 px-4 py-2 rounded-xl text-emerald-300 text-sm flex items-center gap-2 transition border-white/10 shadow-lg"
                         >
-                            <Radio className="w-4 h-4" /> Switch to Screen {screen === 1 ? 2 : 1}
+                            <Radio className="w-4 h-4 shadow-[0_0_10px_rgba(52,211,153,0.5)]" /> Switch to Screen {screen === 1 ? 2 : 1}
                         </button>
                     </div>
 
