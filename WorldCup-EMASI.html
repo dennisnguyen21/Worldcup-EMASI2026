@@ -673,7 +673,7 @@
                 <div className="min-h-screen bg-[#020617] text-white font-['Montserrat',_sans-serif] selection:bg-amber-500 selection:text-white relative">
                     <GlobalBackground />
                     {appMode === 'admin' && (
-                        <AdminView state={sharedState} updateState={updateSharedState} isConnected={isConnected} setAppMode={setAppMode} />
+                        <AdminView state={sharedState} updateState={updateSharedState} isConnected={isConnected} setAppMode={setAppMode} setPresentationScreen={setPresentationScreen} />
                     )}
                     {appMode === 'presentation' && (
                         <PresentationView state={sharedState} isConnected={isConnected} setAppMode={setAppMode} screen={presentationScreen} />
@@ -690,7 +690,7 @@
         // ============================================================================
         // 1. ADMIN DASHBOARD
         // ============================================================================
-        function AdminView({ state, updateState, isConnected, setAppMode }) {
+        function AdminView({ state, updateState, isConnected, setAppMode, setPresentationScreen }) {
             console.log("Rendering AdminView, state:", state);
             const [selectedClassInput, setSelectedClassInput] = useState("");
             const [searchClass, setSearchClass] = useState("");
