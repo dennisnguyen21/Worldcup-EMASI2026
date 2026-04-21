@@ -1192,7 +1192,7 @@
                             </div>
                         ) : (
                             /* --- MAIN DISPLAY AREA (LAYOUT 3.0 FINAL) --- */
-                            <div className="relative z-10 flex-1 p-4 lg:p-8 overflow-hidden flex items-center justify-center">
+                            <div className="relative z-10 flex-1 p-2 lg:p-4 overflow-hidden flex items-center justify-center">
                                 {/* 1. THE PERSISTENT 3x2 GRID (Modified for 6 groups) */}
                                 <div className="grid grid-cols-2 lg:grid-cols-3 grid-rows-3 lg:grid-rows-2 gap-2 lg:gap-4 w-full h-full relative transition-all duration-1000">
                                     {groupsForScreen.map((g, idx) => {
@@ -1202,7 +1202,12 @@
                                         const isBeingDrawn = currentGroup === g;
 
                                         return (
-                                            <div key={g} className={`relative transition-all duration-1000 ${isVisible && !isBeingDrawn ? 'opacity-100 scale-100' : 'opacity-0 scale-50 pointer-events-none'}`}>
+                                            <div key={g} className={`flex flex-col h-full transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-20 grayscale brightness-50'}`}>
+                                                <div className="flex items-center justify-between px-1 mb-1.5">
+                                                    <h3 className="text-sm lg:text-lg 2xl:text-2xl font-black text-amber-500 uppercase tracking-widest flex items-center gap-2 drop-shadow-[0_2px_10px_rgba(245,158,11,0.5)]">
+                                                        Group {g}
+                                                    </h3>
+                                                </div>
                                                 <GroupBox groupId={g} state={state} />
                                             </div>
                                         );
