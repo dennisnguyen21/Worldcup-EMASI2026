@@ -482,6 +482,7 @@
         // --- MAIN COMPONENT ---
         function App() {
             const [appMode, setAppMode] = useState(null);
+            const [presentationScreen, setPresentationScreen] = useState(null);
             const [isConnected, setIsConnected] = useState(false);
 
             const INITIAL_STATE = {
@@ -545,6 +546,16 @@
                 return () => drawRef.off('value', onValueChange);
             }, []);
 
+            // Handle URL params for screen
+            useEffect(() => {
+                const params = new URLSearchParams(window.location.search);
+                const screen = params.get('screen');
+                if (screen === '1' || screen === '2') {
+                    setAppMode('presentation');
+                    setPresentationScreen(parseInt(screen));
+                }
+            }, []);
+
             const updateSharedState = (newState) => {
                 setSharedState(newState);
                 // Only Admin writes to the global cloud state
@@ -597,20 +608,36 @@
                                     </div>
                                 </button>
 
-                                {/* Presentation Button */}
-                                <button
-                                    onClick={() => setAppMode('presentation')}
-                                    className="group relative flex flex-col items-center justify-center gap-3 p-6 glass-light rounded-2xl hover:bg-[#1a0a1a]/80 hover:border-amber-400/60 hover:shadow-[0_10px_30px_rgba(251,191,36,0.15)] transition-all duration-300 hover:-translate-y-1 overflow-hidden"
-                                >
-                                    <div className="absolute inset-0 bg-gradient-to-tl from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    <div className="glass-light p-3 rounded-xl group-hover:scale-110 group-hover:border-amber-400 transition-all duration-300 border-amber-500/30 relative z-10 shadow-inner bg-black/40">
-                                        <MonitorPlay className="w-8 h-8 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]" />
-                                    </div>
-                                    <div className="relative z-10">
-                                        <h3 className="text-sm lg:text-base font-black text-white uppercase mb-1 group-hover:text-amber-300 transition-colors">Presentation Screen</h3>
-                                        <p className="text-[10px] lg:text-xs text-amber-100/40">Display realtime result effects</p>
-                                    </div>
-                                </button>
+                                {/* Presentation Button - Split into two screen options */}
+                                <div className="grid grid-cols-1 gap-4">
+                                    <button
+                                        onClick={() => { setAppMode('presentation'); setPresentationScreen(1); }}
+                                        className="group relative flex flex-col items-center justify-center gap-2 p-4 glass-light rounded-2xl hover:bg-[#1a0a1a]/80 hover:border-amber-400/60 hover:shadow-[0_10px_30px_rgba(251,191,36,0.15)] transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-tl from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                        <div className="glass-light p-2 rounded-xl group-hover:scale-110 group-hover:border-amber-400 transition-all duration-300 border-amber-500/30 relative z-10 shadow-inner bg-black/40">
+                                            <MonitorPlay className="w-6 h-6 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]" />
+                                        </div>
+                                        <div className="relative z-10 text-center">
+                                            <h3 className="text-sm font-black text-white uppercase mb-0.5 group-hover:text-amber-300 transition-colors">Presentation 1</h3>
+                                            <p className="text-[10px] text-amber-100/40">Groups A - F</p>
+                                        </div>
+                                    </button>
+
+                                    <button
+                                        onClick={() => { setAppMode('presentation'); setPresentationScreen(2); }}
+                                        className="group relative flex flex-col items-center justify-center gap-2 p-4 glass-light rounded-2xl hover:bg-[#1a0a1a]/80 hover:border-amber-400/60 hover:shadow-[0_10px_30px_rgba(251,191,36,0.15)] transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-tl from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                        <div className="glass-light p-2 rounded-xl group-hover:scale-110 group-hover:border-amber-400 transition-all duration-300 border-amber-500/30 relative z-10 shadow-inner bg-black/40">
+                                            <MonitorPlay className="w-6 h-6 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]" />
+                                        </div>
+                                        <div className="relative z-10 text-center">
+                                            <h3 className="text-sm font-black text-white uppercase mb-0.5 group-hover:text-amber-300 transition-colors">Presentation 2</h3>
+                                            <p className="text-[10px] text-amber-100/40">Groups G - L</p>
+                                        </div>
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Summary Board Button */}
@@ -649,7 +676,7 @@
                         <AdminView state={sharedState} updateState={updateSharedState} isConnected={isConnected} setAppMode={setAppMode} />
                     )}
                     {appMode === 'presentation' && (
-                        <PresentationView state={sharedState} isConnected={isConnected} setAppMode={setAppMode} />
+                        <PresentationView state={sharedState} isConnected={isConnected} setAppMode={setAppMode} screen={presentationScreen} />
                     )}
                     {appMode === 'summary' && (
                         <SummaryView state={sharedState} isConnected={isConnected} setAppMode={setAppMode} />
@@ -1071,12 +1098,16 @@
         // ============================================================================
         // 2. PRESENTATION VIEW
         // ============================================================================
-        function PresentationView({ state, isConnected, setAppMode }) {
-            console.log("Rendering PresentationView, state:", state);
+        function PresentationView({ state, isConnected, setAppMode, screen }) {
+            console.log(`Rendering PresentationView (Screen ${screen}), state:`, state);
             const { currentDraw: rawCurrentDraw, results: rawResults, currentGroup = "", lastActiveGroup = "" } = state || {};
             const currentDraw = rawCurrentDraw || { stage: 0 };
             const results = rawResults || [];
             const autoScrollRef = useRef(null);
+
+            const groupsForScreen = screen === 1
+                ? ['A', 'B', 'C', 'D', 'E', 'F']
+                : ['G', 'H', 'I', 'J', 'K', 'L'];
 
             const targetGroup = currentGroup || lastActiveGroup;
 
@@ -1153,9 +1184,9 @@
                         ) : (
                             /* --- MAIN DISPLAY AREA (LAYOUT 3.0 FINAL) --- */
                             <div className="relative z-10 flex-1 p-4 lg:p-8 overflow-hidden flex items-center justify-center">
-                                {/* 1. THE PERSISTENT 3x4 GRID (Background Layer) */}
-                                <div className="grid grid-cols-4 grid-rows-3 gap-6 lg:gap-8 w-full h-full max-w-[1700px] max-h-[900px] relative transition-all duration-1000">
-                                    {GROUPS_ALL.map((g, idx) => {
+                                {/* 1. THE PERSISTENT 3x2 GRID (Modified for 6 groups) */}
+                                <div className="grid grid-cols-2 lg:grid-cols-3 grid-rows-3 lg:grid-rows-2 gap-6 lg:gap-8 w-full h-full max-w-[1700px] max-h-[900px] relative transition-all duration-1000">
+                                    {groupsForScreen.map((g, idx) => {
                                         const groupResults = (results && Array.isArray(results)) ? results.filter(r => r && r.group === g) : [];
                                         const isVisible = groupResults.length > 0;
                                         // Hide the grid box if it's currently active in the overlay
