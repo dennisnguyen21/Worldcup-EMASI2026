@@ -1371,7 +1371,7 @@
                             return (
                                 <div key={sub} className={`flex items-center rounded-lg overflow-hidden glass-light border border-white/5 ${isActive ? 'h-14 2xl:h-20' : 'h-12 2xl:h-16'}`}>
                                     {/* CLASS - WIDER & ALWAYS UPPERCASE */}
-                                    <div className={`flex items-center justify-center shrink-0 border-r border-white/5 font-black whitespace-nowrap px-2 uppercase transition-all duration-700 ${isActive
+                                    <div className={`flex items-center justify-center shrink-0 border-r border-white/5 font-black whitespace-nowrap px-1 uppercase transition-all duration-700 ${isActive
                                         ? 'w-64 2xl:w-96 text-2xl lg:text-3xl 2xl:text-5xl text-amber-400'
                                         : ((result?.class || sub).length > 6)
                                             ? 'w-20 2xl:w-28 text-[9px] lg:text-[10px] text-white leading-tight'
@@ -1381,16 +1381,16 @@
                                         {result?.class || sub}
                                     </div>
 
-                                    {/* TEAM NAME - MINIMIZED PADDING */}
-                                    <div className="flex-1 min-w-0 px-2 h-full flex items-center justify-start">
+                                    {/* TEAM NAME - ULTRA MINIMIZED PADDING */}
+                                    <div className="flex-1 min-w-0 px-1 h-full flex items-center justify-start overflow-hidden">
                                         {result?.country ? (
                                             <span className={`text-white font-black uppercase tracking-tighter leading-none ${isActive
                                                 ? (result.country.name.length > 20 ? 'text-lg lg:text-xl 2xl:text-2xl' :
                                                     result.country.name.length > 14 ? 'text-xl lg:text-2xl 2xl:text-3xl' :
                                                         'text-xl lg:text-2xl 2xl:text-4xl')
-                                                : (result.country.name.length > 18 ? 'text-[9px] lg:text-[11px] 2xl:text-[13px]' :
+                                                : (result.country.name.length > 18 ? 'text-[8px] lg:text-[10px] 2xl:text-[12px]' :
                                                     result.country.name.length > 12 ? 'text-xs lg:text-base 2xl:text-lg' :
-                                                        'text-base lg:text-2xl 2xl:text-3xl')
+                                                        'text-base lg:text-2xl 2xl:text-3xl whitespace-nowrap')
                                                 } font-black text-white`}>
                                                 {result.country.name}
                                             </span>
