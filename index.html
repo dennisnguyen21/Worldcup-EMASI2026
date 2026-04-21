@@ -1382,7 +1382,14 @@
                                     {/* TEAM NAME - MORE HORIZONTAL PADDING */}
                                     <div className="flex-1 min-w-0 px-6 h-full flex items-center justify-start">
                                         {result?.country ? (
-                                            <span className={`text-white font-black truncate uppercase tracking-tight ${isActive ? 'text-xl lg:text-2xl 2xl:text-4xl' : 'text-sm lg:text-xl 2xl:text-2xl font-black text-white'}`}>
+                                            <span className={`text-white font-black truncate uppercase tracking-tight ${isActive
+                                                ? (result.country.name.length > 20 ? 'text-lg lg:text-xl 2xl:text-2xl' :
+                                                    result.country.name.length > 14 ? 'text-xl lg:text-2xl 2xl:text-3xl' :
+                                                        'text-xl lg:text-2xl 2xl:text-4xl')
+                                                : (result.country.name.length > 16 ? 'text-[8px] lg:text-[10px] 2xl:text-xs' :
+                                                    result.country.name.length > 12 ? 'text-xs lg:text-sm 2xl:text-base' :
+                                                        'text-sm lg:text-xl 2xl:text-2xl')
+                                                } font-black text-white`}>
                                                 {result.country.name}
                                             </span>
                                         ) : (
