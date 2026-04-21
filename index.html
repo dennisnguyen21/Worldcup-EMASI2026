@@ -1369,16 +1369,20 @@
                             const result = groupResults[idx];
 
                             return (
-                                <div key={sub} className={`flex items-center rounded-lg overflow-hidden glass-light border border-white/5 ${isActive ? 'h-12 2xl:h-16' : 'h-10 2xl:h-14'}`}>
+                                <div key={sub} className={`flex items-center rounded-lg overflow-hidden glass-light border border-white/5 ${isActive ? 'h-14 2xl:h-20' : 'h-12 2xl:h-16'}`}>
                                     {/* CLASS - WIDER & ALWAYS UPPERCASE */}
-                                    <div className={`flex items-center justify-center shrink-0 border-r border-white/5 font-bold whitespace-nowrap px-4 uppercase ${isActive ? 'w-56 2xl:w-80 text-lg lg:text-xl 2xl:text-3xl text-amber-400' : 'w-20 2xl:w-32 text-xs lg:text-sm text-white/80'}`}>
+                                    <div className={`flex items-center justify-center shrink-0 border-r border-white/5 font-black whitespace-nowrap px-4 uppercase transition-all duration-700 ${isActive
+                                        ? 'w-64 2xl:w-96 text-2xl lg:text-3xl 2xl:text-5xl text-amber-400'
+                                        : ((result?.class || sub).length > 4)
+                                            ? 'w-24 2xl:w-40 text-[10px] lg:text-xs text-white/50'
+                                            : 'w-24 2xl:w-40 text-lg lg:text-2xl 2xl:text-3xl text-white/90'}`}>
                                         {result?.class || sub}
                                     </div>
 
                                     {/* TEAM NAME - MORE HORIZONTAL PADDING */}
                                     <div className="flex-1 min-w-0 px-6 h-full flex items-center justify-start">
                                         {result?.country ? (
-                                            <span className={`text-white font-black truncate uppercase ${isActive ? 'text-lg lg:text-xl 2xl:text-3xl' : 'text-sm lg:text-base italic text-white'}`}>
+                                            <span className={`text-white font-black truncate uppercase tracking-tight ${isActive ? 'text-xl lg:text-2xl 2xl:text-4xl' : 'text-sm lg:text-lg 2xl:text-xl italic text-white'}`}>
                                                 {result.country.name}
                                             </span>
                                         ) : (
@@ -1387,7 +1391,7 @@
                                     </div>
 
                                     {/* FLAG - ENLARGED */}
-                                    <div className={`h-full flex items-center justify-center shrink-0 bg-black/10 ${isActive ? 'w-24 2xl:w-36' : 'w-14 2xl:w-20'}`}>
+                                    <div className={`h-full flex items-center justify-center shrink-0 bg-black/10 ${isActive ? 'w-24 2xl:w-36' : 'w-16 2xl:w-24'}`}>
                                         {result?.country ? (
                                             <img src={getFlagUrl(result.country.code)} className={`${isActive ? 'w-14 h-8 2xl:w-20 2xl:h-12' : 'w-10 h-6'} object-cover rounded shadow-sm`} alt="flag" />
                                         ) : (
