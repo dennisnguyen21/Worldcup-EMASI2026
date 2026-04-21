@@ -1194,7 +1194,7 @@
                             /* --- MAIN DISPLAY AREA (LAYOUT 3.0 FINAL) --- */
                             <div className="relative z-10 flex-1 p-4 lg:p-8 overflow-hidden flex items-center justify-center">
                                 {/* 1. THE PERSISTENT 3x2 GRID (Modified for 6 groups) */}
-                                <div className="grid grid-cols-2 lg:grid-cols-3 grid-rows-3 lg:grid-rows-2 gap-6 lg:gap-8 w-full h-full max-w-[1700px] max-h-[900px] relative transition-all duration-1000">
+                                <div className="grid grid-cols-2 lg:grid-cols-3 grid-rows-3 lg:grid-rows-2 gap-8 lg:gap-12 w-full h-full relative transition-all duration-1000">
                                     {groupsForScreen.map((g, idx) => {
                                         const groupResults = (results && Array.isArray(results)) ? results.filter(r => r && r.group === g) : [];
                                         const isVisible = groupResults.length > 0;
@@ -1356,7 +1356,7 @@
                 <div className={`flex flex-col w-full transition-all duration-700 ${isActive ? 'scale-105 z-20' : ''}`}>
                     {/* Header */}
                     <div className="flex items-center justify-between px-1.5 mb-1 relative">
-                        <div className={`font-black uppercase transition-all duration-700 ${isActive ? 'text-2xl text-gradient-gold lg:text-3xl' : 'text-xs text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.3)]'}`}>
+                        <div className={`font-black uppercase transition-all duration-700 ${isActive ? 'text-2xl text-gradient-gold lg:text-3xl' : 'text-sm lg:text-lg text-amber-400 drop-shadow-[0_0_8px_rgba(245,158,11,0.3)]'}`}>
                             GROUP {groupId}
                         </div>
                         {isActive && <div className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>}
@@ -1369,16 +1369,16 @@
                             const result = groupResults[idx];
 
                             return (
-                                <div key={sub} className={`flex items-center rounded-lg overflow-hidden glass-light border border-white/5 ${isActive ? 'h-12 2xl:h-16' : 'h-7 2xl:h-9'}`}>
+                                <div key={sub} className={`flex items-center rounded-lg overflow-hidden glass-light border border-white/5 ${isActive ? 'h-12 2xl:h-16' : 'h-10 2xl:h-14'}`}>
                                     {/* CLASS - WIDER & ALWAYS UPPERCASE */}
-                                    <div className={`flex items-center justify-center shrink-0 border-r border-white/5 font-bold whitespace-nowrap px-4 uppercase ${isActive ? 'w-56 2xl:w-80 text-lg lg:text-xl 2xl:text-3xl text-amber-400' : 'w-16 2xl:w-24 text-[10px] text-white/80'}`}>
+                                    <div className={`flex items-center justify-center shrink-0 border-r border-white/5 font-bold whitespace-nowrap px-4 uppercase ${isActive ? 'w-56 2xl:w-80 text-lg lg:text-xl 2xl:text-3xl text-amber-400' : 'w-20 2xl:w-32 text-xs lg:text-sm text-white/80'}`}>
                                         {result?.class || sub}
                                     </div>
 
                                     {/* TEAM NAME - MORE HORIZONTAL PADDING */}
                                     <div className="flex-1 min-w-0 px-6 h-full flex items-center justify-start">
                                         {result?.country ? (
-                                            <span className={`text-white font-black truncate uppercase ${isActive ? 'text-lg lg:text-xl 2xl:text-3xl' : 'text-xs italic text-white'}`}>
+                                            <span className={`text-white font-black truncate uppercase ${isActive ? 'text-lg lg:text-xl 2xl:text-3xl' : 'text-sm lg:text-base italic text-white'}`}>
                                                 {result.country.name}
                                             </span>
                                         ) : (
@@ -1387,9 +1387,9 @@
                                     </div>
 
                                     {/* FLAG - ENLARGED */}
-                                    <div className={`h-full flex items-center justify-center shrink-0 bg-black/10 ${isActive ? 'w-24 2xl:w-36' : 'w-10 2xl:w-12'}`}>
+                                    <div className={`h-full flex items-center justify-center shrink-0 bg-black/10 ${isActive ? 'w-24 2xl:w-36' : 'w-14 2xl:w-20'}`}>
                                         {result?.country ? (
-                                            <img src={getFlagUrl(result.country.code)} className={`${isActive ? 'w-14 h-8 2xl:w-20 2xl:h-12' : 'w-6 h-4'} object-cover rounded shadow-sm`} alt="flag" />
+                                            <img src={getFlagUrl(result.country.code)} className={`${isActive ? 'w-14 h-8 2xl:w-20 2xl:h-12' : 'w-10 h-6'} object-cover rounded shadow-sm`} alt="flag" />
                                         ) : (
                                             <div className="w-4 h-2.5 bg-white/5 rounded"></div>
                                         )}
