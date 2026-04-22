@@ -336,7 +336,7 @@
 
         const INITIAL_COUNTRIES = [
             // Column 1
-            { name: "Korea Republic", code: "kr" }, { name: "Mexico", code: "mx" }, { name: "South Africa", code: "za" },
+            { name: "Korea", code: "kr" }, { name: "Mexico", code: "mx" }, { name: "South Africa", code: "za" },
             { name: "Canada", code: "ca" }, { name: "Qatar", code: "qa" }, { name: "Switzerland", code: "ch" },
             { name: "Brazil", code: "br" }, { name: "Morocco", code: "ma" }, { name: "Haiti", code: "ht" },
             { name: "Scotland", code: "gb-sct" }, { name: "USA", code: "us" }, { name: "Paraguay", code: "py" },
@@ -355,9 +355,9 @@
 
             // Column 4
             { name: "Colombia", code: "co" }, { name: "England", code: "gb-eng" }, { name: "Croatia", code: "hr" },
-            { name: "Ghana", code: "gh" }, { name: "Panama", code: "pa" }, { name: "Czech Republic", code: "cz" },
+            { name: "Ghana", code: "gh" }, { name: "Panama", code: "pa" }, { name: "Czechia", code: "cz" },
             { name: "Turkey", code: "tr" }, { name: "Iraq", code: "iq" }, { name: "Sweden", code: "se" },
-            { name: "Bosnia & Herzegovina", code: "ba" }, { name: "DR Congo", code: "cd" }
+            { name: "Bosnia", code: "ba" }, { name: "DR Congo", code: "cd" }
         ];
 
         const getFlagUrl = (code) => {
@@ -503,7 +503,7 @@
 
             // Listen to Firebase for global state updates
             useEffect(() => {
-                const drawRef = database.ref('drawState_v2');
+                const drawRef = database.ref('drawState_v3');
 
                 // Initial fetch
                 drawRef.once('value').then((snapshot) => {
@@ -560,7 +560,7 @@
                 setSharedState(newState);
                 // Only Admin writes to the global cloud state
                 if (appMode === 'admin') {
-                    database.ref('drawState_v2').set(newState).catch(err => {
+                    database.ref('drawState_v3').set(newState).catch(err => {
                         console.error("Failed to update cloud state:", err);
                     });
                 }
