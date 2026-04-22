@@ -331,7 +331,7 @@
             "5M", "5A", "5S", "6E", "6M", "6A", "6S", "7M",
             "7A", "7S", "8M", "8A", "9E", "9M", "9A", "10E",
             "10M", "11E", "11M", "12E", "12M", "TA+LIB", "ADMIN 1", "ADMIN 2",
-            "SA", "SKYLINE", "ARTS", "SCIENCES", "IT+\nSUPPORT", "MOET", "MAINTENANCE+\nCLEANERS"
+            "SA", "SKYLINE", "ARTS", "SCIENCES", "IT+SUPPORT", "MOET", "MAINTENANCE+\nCLEANERS"
         ];
 
         const INITIAL_COUNTRIES = [
@@ -503,7 +503,7 @@
 
             // Listen to Firebase for global state updates
             useEffect(() => {
-                const drawRef = database.ref('drawState_v3');
+                const drawRef = database.ref('drawState_v4');
 
                 // Initial fetch
                 drawRef.once('value').then((snapshot) => {
@@ -560,7 +560,7 @@
                 setSharedState(newState);
                 // Only Admin writes to the global cloud state
                 if (appMode === 'admin') {
-                    database.ref('drawState_v3').set(newState).catch(err => {
+                    database.ref('drawState_v4').set(newState).catch(err => {
                         console.error("Failed to update cloud state:", err);
                     });
                 }
