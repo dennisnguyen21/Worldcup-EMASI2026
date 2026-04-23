@@ -503,7 +503,7 @@
 
             // Listen to Firebase for global state updates
             useEffect(() => {
-                const drawRef = database.ref('drawState_v4');
+                const drawRef = database.ref('drawState_v5');
 
                 // Initial fetch
                 drawRef.once('value').then((snapshot) => {
@@ -560,7 +560,7 @@
                 setSharedState(newState);
                 // Only Admin writes to the global cloud state
                 if (appMode === 'admin') {
-                    database.ref('drawState_v4').set(newState).catch(err => {
+                    database.ref('drawState_v5').set(newState).catch(err => {
                         console.error("Failed to update cloud state:", err);
                     });
                 }
@@ -1380,40 +1380,22 @@
                             const result = groupResults[idx];
 
                             return (
-                                <div key={sub} className={`flex items-center rounded-lg overflow-hidden glass-light border border-white/5 ${isActive ? 'h-14 2xl:h-20' : isSummary ? 'h-8 lg:h-9 2xl:h-11' : 'h-12 2xl:h-16'}`}>
-                                    {/* CLASS - FIXED WIDTH WITH MULTI-LINE SUPPORT */}
-                                    <div className={`flex items-center justify-center shrink-0 border-r border-white/5 font-black px-1 uppercase transition-all duration-700 text-center ${isActive
-                                        ? 'w-48 lg:w-56 2xl:w-80 ' + (
-                                            (result?.class || sub).length > 10 ? 'text-xl lg:text-2xl 2xl:text-3xl leading-none whitespace-pre-line' :
-                                                (result?.class || sub).length > 6 ? 'text-2xl lg:text-3xl 2xl:text-4xl leading-none whitespace-pre-line' :
-                                                    'text-3xl lg:text-4xl 2xl:text-5xl whitespace-nowrap'
-                                        ) + ' text-amber-400'
-                                        : (isSummary ? 'w-20 lg:w-24 2xl:w-32 ' : 'w-26 lg:w-32 2xl:w-44 ') + (
-                                            (result?.class || sub).length > 10 ? 'text-[10px] lg:text-[12px] 2xl:text-[14px] text-white leading-[1] whitespace-pre-line break-words px-0.5' :
-                                                (result?.class || sub).length > 6 ? (isSummary ? 'text-[11px] lg:text-[13.5px] 2xl:text-[15px]' : 'text-[12px] lg:text-[14.5px] 2xl:text-[18px]') + ' text-white leading-[1.1] whitespace-pre-line' :
-                                                    (result?.class || sub).length > 4 ? (isSummary ? 'text-[12.5px] lg:text-[14.5px] 2xl:text-[17px]' : 'text-[14.5px] lg:text-[18.5px] 2xl:text-[21px]') + ' text-white whitespace-nowrap' :
-                                                        (isSummary ? 'text-[13.5px] lg:text-[15.5px] 2xl:text-[18px]' : 'text-[16px] lg:text-[20px] 2xl:text-[24px]') + ' text-white whitespace-nowrap'
-                                        )}`}>
+                                <div key={sub} className={`flex items-center rounded-lg overflow-hidden glass-light border border-white/5 ${isActive ? 'h-14 2xl:h-20' : isSummary ? 'h-8 lg:h-9 2xl:h-11' : 'h-12 2xl:h-16'}`} style={{ fontFamily: 'HelvetIns, sans-serif' }}>
+                                    {/* CLASS - FLEX BASIS ADJUSTED */}
+                                    <div className={`flex items-center justify-center flex-[0.8] border-r border-white/5 font-black px-1 uppercase transition-all duration-700 text-center ${isActive ? 'text-amber-400' : 'text-white'}`}
+                                        style={{ fontSize: isSummary ? '11px' : ((result?.class && (result.class.includes('MAINTENANCE') || result.class.includes('IT+SUPPORT'))) ? '18px' : '30px') }}>
                                         {result?.class || '—'}
                                     </div>
 
-                                    {/* TEAM NAME - ULTRA MINIMIZED PADDING */}
-                                    <div className="flex-1 min-w-0 px-1 h-full flex items-center justify-start overflow-hidden">
+                                    {/* TEAM NAME - EXPANDED WIDTH */}
+                                    <div className="flex-[1.2] min-w-0 px-1 h-full flex items-center justify-start overflow-hidden">
                                         {result?.country ? (
-                                            <span className={`text-white font-black uppercase tracking-tighter leading-none ${isActive
-                                                ? (result.country.name.length > 20 ? 'text-lg lg:text-xl 2xl:text-2xl' :
-                                                    result.country.name.length > 14 ? 'text-xl lg:text-2xl 2xl:text-3xl' :
-                                                        'text-xl lg:text-2xl 2xl:text-4xl')
+                                            <span className={`font-black uppercase tracking-tighter leading-none whitespace-nowrap ${isActive
+                                                ? 'text-xl lg:text-2xl 2xl:text-4xl'
                                                 : isSummary
-                                                    ? (result.country.name.length > 20 ? 'text-[8px] lg:text-[9px] 2xl:text-[11px]' :
-                                                        result.country.name.length > 16 ? 'text-[9px] lg:text-[11px] 2xl:text-[13px]' :
-                                                            result.country.name.length > 12 ? 'text-[10px] lg:text-[12px] 2xl:text-[15px]' :
-                                                                'text-[11px] lg:text-[14px] 2xl:text-[18px]')
-                                                    : (result.country.name.length > 20 ? 'text-[10px] lg:text-[12px] 2xl:text-[14px]' :
-                                                        result.country.name.length > 16 ? 'text-[11px] lg:text-[14px] 2xl:text-[17px]' :
-                                                            result.country.name.length > 12 ? 'text-sm lg:text-xl 2xl:text-2xl' :
-                                                                'text-base lg:text-2xl 2xl:text-3xl')
-                                                } font-black text-white`}>
+                                                    ? 'text-[11px] lg:text-[14px] 2xl:text-[18px]'
+                                                    : 'text-base lg:text-2xl 2xl:text-3xl'
+                                                } font-black text-emerald-400`}>
                                                 {result.country.name}
                                             </span>
                                         ) : (
