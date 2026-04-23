@@ -1382,8 +1382,8 @@
                             return (
                                 <div key={sub} className={`flex items-center rounded-lg overflow-hidden glass-light border border-white/5 ${isActive ? 'h-14 2xl:h-20' : isSummary ? 'h-8 lg:h-9 2xl:h-11' : 'h-12 2xl:h-16'}`} style={{ fontFamily: 'HelvetIns, sans-serif' }}>
                                     {/* CLASS - FLEX BASIS ADJUSTED */}
-                                    <div className={`flex items-center justify-center flex-[0.8] border-r border-white/5 font-black px-1 uppercase transition-all duration-700 text-center ${isActive ? 'text-amber-400' : 'text-white'}`}
-                                        style={{ fontSize: isSummary ? '11px' : ((result?.class && (result.class.includes('MAINTENANCE') || result.class.includes('IT+SUPPORT'))) ? '18px' : '30px') }}>
+                                    <div className={`flex items-center justify-center flex-[0.8] border-r border-white/5 font-black px-1 uppercase transition-all duration-700 text-center whitespace-pre-line leading-tight ${isActive ? 'text-amber-400' : 'text-white'}`}
+                                        style={{ fontSize: isSummary ? '11px' : (isActive ? '30px' : ((result?.class && (result.class.includes('MAINTENANCE') || result.class.includes('IT+SUPPORT'))) ? '18px' : '30px')) }}>
                                         {result?.class || '—'}
                                     </div>
 
