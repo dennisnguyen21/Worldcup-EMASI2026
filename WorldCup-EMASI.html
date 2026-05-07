@@ -331,7 +331,7 @@
             "5M", "5A", "5S", "6E", "6M", "6A", "6S", "7M",
             "7A", "7S", "8M", "8A", "9E", "9M", "9A", "10E",
             "10M", "11E", "11M", "12E", "12M", "TA+LIB", "ADMIN 1", "ADMIN 2",
-            "SA", "SKYLINE", "ARTS", "SCIENCES", "IT+SUPPORT", "MOET", "MAINTENANCE+\nCLEANERS"
+            "SA", "SKYLINE", "ARTS", "SCIENCES", "IT+\nSUPPORT", "MOET", "MAINTENANCE+\nCLEANERS"
         ];
 
         const INITIAL_COUNTRIES = [
@@ -348,7 +348,7 @@
             { name: "Egypt", code: "eg" }, { name: "New Zealand", code: "nz" }, { name: "Spain", code: "es" },
 
             // Column 3
-            { name: "Cape Verde", code: "cv" }, { name: "Saudi Arabia", code: "sa" }, { name: "Uruguay", code: "uy" },
+            { name: "Cabo Verde", code: "cv" }, { name: "Saudi Arabia", code: "sa" }, { name: "Uruguay", code: "uy" },
             { name: "France", code: "fr" }, { name: "Senegal", code: "sn" }, { name: "Norway", code: "no" },
             { name: "Argentina", code: "ar" }, { name: "Algeria", code: "dz" }, { name: "Austria", code: "at" },
             { name: "Jordan", code: "jo" }, { name: "Portugal", code: "pt" }, { name: "Uzbekistan", code: "uz" },
@@ -357,7 +357,7 @@
             { name: "Colombia", code: "co" }, { name: "England", code: "gb-eng" }, { name: "Croatia", code: "hr" },
             { name: "Ghana", code: "gh" }, { name: "Panama", code: "pa" }, { name: "Czechia", code: "cz" },
             { name: "Turkey", code: "tr" }, { name: "Iraq", code: "iq" }, { name: "Sweden", code: "se" },
-            { name: "Bosnia", code: "ba" }, { name: "DR Congo", code: "cd" }
+            { name: "Bosnia", code: "ba" }, { name: "Congo DR", code: "cd" }
         ];
 
         const getFlagUrl = (code) => {
@@ -1383,7 +1383,7 @@
                                 <div key={sub} className={`flex items-center rounded-lg overflow-hidden glass-light border border-white/5 ${isActive ? 'h-14 2xl:h-20' : isSummary ? 'h-8 lg:h-9 2xl:h-11' : 'h-12 2xl:h-16'}`} style={{ fontFamily: 'HelvetIns, sans-serif' }}>
                                     {/* CLASS - FLEX BASIS ADJUSTED */}
                                     <div className={`flex items-center justify-center flex-[0.8] border-r border-white/5 font-black px-1 uppercase transition-all duration-700 text-center whitespace-pre-line leading-tight ${isActive ? 'text-amber-400' : 'text-white'}`}
-                                        style={{ fontSize: isSummary ? '11px' : (isActive ? '30px' : ((result?.class && (result.class.includes('MAINTENANCE') || result.class.includes('IT+SUPPORT'))) ? '18px' : '30px')) }}>
+                                        style={{ fontSize: isSummary ? '11px' : (isActive ? '30px' : ((result?.class && (result.class.includes('MAINTENANCE') || result.class.includes('IT'))) ? '18px' : '30px')) }}>
                                         {result?.class || '—'}
                                     </div>
 
