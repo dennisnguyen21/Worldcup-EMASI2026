@@ -526,6 +526,36 @@
                 const onValueChange = drawRef.on('value', (snapshot) => {
                     const data = snapshot.val();
                     if (data && typeof data === 'object') {
+                        // --- MIGRATION LOGIC ---
+                        let migrated = false;
+                        if (Array.isArray(data.remainingCountries)) {
+                            data.remainingCountries = data.remainingCountries.map(c => {
+                                if (c && c.name === "Cape Verde") { c.name = "Cabo Verde"; migrated = true; }
+                                if (c && c.name === "DR Congo") { c.name = "Congo DR"; migrated = true; }
+                                return c;
+                            });
+                        }
+                        if (Array.isArray(data.remainingClasses)) {
+                            data.remainingClasses = data.remainingClasses.map(c => {
+                                if (c === "IT+SUPPORT") { migrated = true; return "IT+\nSUPPORT"; }
+                                return c;
+                            });
+                            if (migrated) data.remainingClasses = [...new Set(data.remainingClasses)];
+                        }
+                        if (Array.isArray(data.results)) {
+                            data.results = data.results.map(r => {
+                                if (r && r.class === "IT+SUPPORT") { r.class = "IT+\nSUPPORT"; migrated = true; }
+                                if (r && r.country && r.country.name === "Cape Verde") { r.country.name = "Cabo Verde"; migrated = true; }
+                                if (r && r.country && r.country.name === "DR Congo") { r.country.name = "Congo DR"; migrated = true; }
+                                return r;
+                            });
+                        }
+                        if (data.currentDraw) {
+                            if (data.currentDraw.selectedClass === "IT+SUPPORT") { data.currentDraw.selectedClass = "IT+\nSUPPORT"; migrated = true; }
+                            if (data.currentDraw.selectedCountry && data.currentDraw.selectedCountry.name === "Cape Verde") { data.currentDraw.selectedCountry.name = "Cabo Verde"; migrated = true; }
+                            if (data.currentDraw.selectedCountry && data.currentDraw.selectedCountry.name === "DR Congo") { data.currentDraw.selectedCountry.name = "Congo DR"; migrated = true; }
+                        }
+
                         setSharedState(prev => {
                             const merged = { ...INITIAL_STATE, ...data };
                             return {
